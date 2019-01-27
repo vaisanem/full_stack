@@ -28,33 +28,35 @@ const Total = (props) => {
 const Content = (props) => {
   return (
     <div>
-    <Part part = {props.part1}/>
-    <Part part = {props.part2}/>
-    <Part part = {props.part3}/>
+      <Part part = {props.parts[0]}/>
+      <Part part = {props.parts[1]}/>
+      <Part part = {props.parts[2]}/>
     </div>
   )
 }
 
 const App = () => {
   const course = 'Half Stack -sovelluskehitys'
-  const part1 = {
-    name: 'Reactin perusteet',
-    exercises: 10
-  }  
-  const part2 = {
-    name: 'Tiedonvälitys propseilla',
-    exercises: 7
-  }  
-  const part3 = {
-    name: 'Komponenttien tila',
-    exercises: 14
-  }  
+  const parts = [
+    {
+      name: 'Reactin perusteet',
+      exercises: 10
+    },  
+    {
+      name: 'Tiedonvälitys propseilla',
+      exercises: 7
+    },  
+    {
+      name: 'Komponenttien tila',
+      exercises: 14
+    }
+  ]  
 
   return (
     <div>
       <Header course = {course}/>
-      <Content part1 = {part1} part2 = {part2} part3 = {part3}/>
-      <Total exercises = {part1.exercises + part2.exercises + part3.exercises}/>
+      <Content parts = {parts}/>
+      <Total exercises = {parts.reduce((all, part) => all + part.exercises, 0)}/>
     </div>
   )
 }

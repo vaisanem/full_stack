@@ -44,7 +44,7 @@ const sum = (votes) => {
 
 const App = () => {
   const styles = {display: 'inline-block'}
-  // tallenna napit omaan tilaansa
+  // tallenna napit omaan tilaansa?
   let attributes = useState(0)
   const good = { name: "hyvä", count: attributes[0], listener: attributes[1], value: 1 }
   attributes = useState(0)

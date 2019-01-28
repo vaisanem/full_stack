@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 const Header = ({header}) => <h2> {header} </h2>
 
 const Button = ({properties}) => {
-
   const action = () => properties.listener(properties.count + 1)  
 
   return (
@@ -21,12 +20,28 @@ const Stats = ({properties}) => {
   )
 }
 
+const Statistics = ({attributes}) => {
+  const [good, neutral, bad, all, average, positive] = attributes
+
+  return (
+    <>
+      <Stats properties = {good}/>
+      <Stats properties = {neutral}/>
+      <Stats properties = {bad}/>
+      <Stats properties = {all}/>
+      <Stats properties = {average}/>
+      <Stats properties = {positive}/>
+    </>
+  )
+}
+
 const sum = (votes) => {
 
   return votes.reduce((all, type) => all + type.count * type.value, 0)
 }    
 
 const App = () => {
+  const styles = {display: 'inline-block'}
   // tallenna napit omaan tilaansa
   let attributes = useState(0)
   const good = { name: "hyvä", count: attributes[0], listener: attributes[1], value: 1 }
@@ -37,7 +52,7 @@ const App = () => {
   const all = { name: "yhteensä", count: good.count + neutral.count + bad.count}
   const average = { name : "keskiarvo", count: sum([good, neutral, bad]) / all.count }
   const positive = { name: "positiivisia", count: (good.count / all.count) * 100 + " %"}
-  const styles = {display: 'inline-block'}
+  attributes = [good, neutral, bad, all, average, positive]
 
   return (
     <div>
@@ -49,12 +64,7 @@ const App = () => {
       </div>
       <Header header="statistiikka"/>
       <div>
-        <Stats properties = {good}/>
-        <Stats properties = {neutral}/>
-        <Stats properties = {bad}/>
-        <Stats properties = {all}/>
-        <Stats properties = {average}/>
-        <Stats properties = {positive}/>
+        <Statistics attributes = {attributes}/>
       </div>
     </div>
   )

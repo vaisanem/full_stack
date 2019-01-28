@@ -23,6 +23,8 @@ const Stats = ({properties}) => {
 const Statistics = ({attributes}) => {
   const [good, neutral, bad, all, average, positive] = attributes
 
+  if (all.count === 0) return <p> ei palautteita </p>
+
   return (
     <>
       <Stats properties = {good}/>

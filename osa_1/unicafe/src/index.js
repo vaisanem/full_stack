@@ -19,16 +19,24 @@ const Stats = ({properties}) => {
   return (
     <p> {properties.name} {properties.count} </p>
   )
-}  
+}
+
+const sum = (votes) => {
+
+  return votes.reduce((all, type) => all + type.count * type.value, 0)
+}    
 
 const App = () => {
   // tallenna napit omaan tilaansa
   let attributes = useState(0)
-  const good = { name: "hyvä", count: attributes[0], listener: attributes[1] }
+  const good = { name: "hyvä", count: attributes[0], listener: attributes[1], value: 1 }
   attributes = useState(0)
-  const neutral = { name: "neutraali", count: attributes[0], listener: attributes[1] }
+  const neutral = { name: "neutraali", count: attributes[0], listener: attributes[1], value: 0 }
   attributes = useState(0)
-  const bad = { name: "huono", count: attributes[0], listener: attributes[1] }
+  const bad = { name: "huono", count: attributes[0], listener: attributes[1], value: -1 }
+  const all = { name: "yhteensä", count: good.count + neutral.count + bad.count}
+  const average = { name : "keskiarvo", count: sum([good, neutral, bad]) / all.count }
+  const positive = { name: "positiivisia", count: (good.count / all.count) * 100 + " %"}
   const styles = {display: 'inline-block'}
 
   return (
@@ -44,6 +52,9 @@ const App = () => {
         <Stats properties = {good}/>
         <Stats properties = {neutral}/>
         <Stats properties = {bad}/>
+        <Stats properties = {all}/>
+        <Stats properties = {average}/>
+        <Stats properties = {positive}/>
       </div>
     </div>
   )

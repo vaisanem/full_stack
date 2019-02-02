@@ -8,14 +8,27 @@ const App = () => {
 
   const addContact = (event) => {
     event.preventDefault()
-    const person = {
-      name: newName
+    if (!checkIfExists()) {
+      const person = {
+        name: newName
+      }
+      setPersons(persons.concat(person))
+      setNewName('')
     }
-    setPersons(persons.concat(person))
-    setNewName('')
   }
 
   const handleInputChange = (event) => setNewName(event.target.value)
+
+  const checkIfExists = () => {
+    const present = persons.filter( one => one.name === newName )
+    if (present.length === 1) {
+      alert(`${newName} on jo luettelossa`)
+
+      return true
+    }
+
+    return false
+  }
 
   const renderContacts = () => persons.map( one => <p key={one.name} > {one.name} </p> )
 

@@ -2,27 +2,32 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: "0123456789" }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const addContact = (event) => {
     event.preventDefault()
     if (!checkIfExists()) {
       const person = {
-        name: newName
+        name: newName,
+        number: newNumber
       }
       setPersons(persons.concat(person))
       setNewName('')
+      setNewNumber('')
     }
   }
 
-  const handleInputChange = (event) => setNewName(event.target.value)
+  const handleNameChange = (event) => setNewName(event.target.value)
+
+  const handleNumberChange = (event) => setNewNumber(event.target.value)
 
   const checkIfExists = () => {
-    const present = persons.filter( one => one.name === newName )
+    const present = persons.filter( one => one.number === newNumber )
     if (present.length === 1) {
-      alert(`${newName} on jo luettelossa`)
+      alert(`${newNumber} on jo luettelossa`)
 
       return true
     }
@@ -30,7 +35,9 @@ const App = () => {
     return false
   }
 
-  const renderContacts = () => persons.map( one => <p key={one.name} > {one.name} </p> )
+  const renderContacts = () => persons.map( 
+    one => <p key={one.number}> {one.name} {one.number} </p> 
+  )
 
   return (
     <div>
@@ -39,7 +46,13 @@ const App = () => {
         <div>
           nimi: <input 
             value={ newName }
-            onChange={ handleInputChange } 
+            onChange={ handleNameChange } 
+          />
+        </div>
+        <div>
+          numero: <input 
+            value={ newNumber }
+            onChange={ handleNumberChange } 
           />
         </div>
         <div>

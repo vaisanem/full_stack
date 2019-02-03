@@ -5,6 +5,7 @@ const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [ query, setQuery ] = useState("")
 
   const getContacts = () => {
     axios
@@ -42,13 +43,41 @@ const App = () => {
     return false
   }
 
-  const Contacts = () => persons.map( 
-    one => <p key={one.number}> {one.name} {one.number} </p> 
-  )
+  const Searchbar = () => {
+    const handleQueryChange = (event) => {
+      const search = event.target.value.toLowerCase().trim()
+      setQuery(search)
+    }  
+
+    return (
+      <div>
+        rajaa yhteystietoja: <input
+          value={ query }
+          onChange={ handleQueryChange }
+          autoFocus
+        />
+      </div>
+    )  
+  }
+
+  const Contacts = () => {
+    const cropped = persons.filter( contact => 
+      contact.name.toLowerCase().includes(query) 
+      || contact.number.includes(query) 
+    )
+
+    return (
+      cropped.map( 
+        one => <p key={one.number}> {one.name} {one.number} </p> 
+      )
+    )  
+  }  
 
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <Searchbar/>
+      <h4>Lisää uusi yhteystieto</h4>
       <form onSubmit={ addContact }>
         <div>
           nimi: <input 
@@ -67,7 +96,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      <ul> { <Contacts/> } </ul>
+      <ul> <Contacts/> </ul>
     </div>
   )
 

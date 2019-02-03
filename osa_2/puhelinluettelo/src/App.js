@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Searchbar from './components/Searchbar'
+import Contacts from './components/Contacts'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
@@ -32,6 +34,8 @@ const App = () => {
 
   const handleNumberChange = (event) => setNewNumber(event.target.value)
 
+  const handleQueryChange = (event) => setQuery(event.target.value.toLowerCase())
+
   const checkIfExists = () => {
     const present = persons.filter( one => one.number === newNumber )
     if (present.length === 1) {
@@ -41,42 +45,12 @@ const App = () => {
     }
 
     return false
-  }
-
-  const Searchbar = () => {
-    const handleQueryChange = (event) => {
-      const search = event.target.value.toLowerCase().trim()
-      setQuery(search)
-    }  
-
-    return (
-      <div>
-        rajaa yhteystietoja: <input
-          value={ query }
-          onChange={ handleQueryChange }
-          autoFocus
-        />
-      </div>
-    )  
-  }
-
-  const Contacts = () => {
-    const cropped = persons.filter( contact => 
-      contact.name.toLowerCase().includes(query) 
-      || contact.number.includes(query) 
-    )
-
-    return (
-      cropped.map( 
-        one => <p key={one.number}> {one.name} {one.number} </p> 
-      )
-    )  
-  }  
+  } 
 
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-      <Searchbar/>
+      <Searchbar query = { query } listener = { handleQueryChange }/>
       <h4>Lisää uusi yhteystieto</h4>
       <form onSubmit={ addContact }>
         <div>
@@ -96,7 +70,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      <ul> <Contacts/> </ul>
+      <ul> <Contacts persons = { persons } query = { query }/> </ul>
     </div>
   )
 

@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: "0123456789" }
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+
+  const getContacts = () => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then( response => setPersons(response.data))
+  }
 
   const addContact = (event) => {
     event.preventDefault()
@@ -19,6 +24,8 @@ const App = () => {
       setNewNumber('')
     }
   }
+
+  useEffect(getContacts, [])
 
   const handleNameChange = (event) => setNewName(event.target.value)
 
@@ -35,7 +42,7 @@ const App = () => {
     return false
   }
 
-  const renderContacts = () => persons.map( 
+  const Contacts = () => persons.map( 
     one => <p key={one.number}> {one.name} {one.number} </p> 
   )
 
@@ -60,7 +67,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      <ul> { renderContacts() } </ul>
+      <ul> { <Contacts/> } </ul>
     </div>
   )
 

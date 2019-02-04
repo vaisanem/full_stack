@@ -32,6 +32,19 @@ const App = () => {
     }
   }
 
+  const deleteContact = (contact) => {
+    const confirm = window.confirm(
+      `Poistetaanko ${contact.name} yhteystiedoista?`
+    )
+    if (confirm) {
+      contactService.remove(contact.id)
+      const filtered = contacts.filter(
+        one => one.id !== contact.id
+      )
+      setContacts(filtered)
+    }
+  }
+
   useEffect(getContacts, [])
 
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -74,7 +87,9 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      <ul> <Contacts contacts = { contacts } query = { query }/> </ul>
+      <ul>
+        <Contacts contacts = {contacts} query = {query} action = {deleteContact}/>
+      </ul>
     </div>
   )
 

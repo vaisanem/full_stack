@@ -9,7 +9,7 @@ const Contacts = ({ persons, query }) => {
 
   return (
     cropped.map( 
-      one => <Contact one = { one }/>
+      one => <Contact key = { one.id } one = { one }/>
     )
   )  
 }

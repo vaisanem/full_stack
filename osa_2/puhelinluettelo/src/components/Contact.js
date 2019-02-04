@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Contact = ({ one }) => 
-  <p key={ one.number }>
+  <p>
     { one.name } { one.number }
   </p>
 

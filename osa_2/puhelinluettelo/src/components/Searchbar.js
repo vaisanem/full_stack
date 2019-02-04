@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Searchbar = ({ text, query, listener }) => {  
+const Searchbar = ({ query, listener }) => {  
 
   return (
     <div>

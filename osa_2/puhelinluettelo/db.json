@@ -1,5 +1,5 @@
 {
-  "persons": [
+  "contacts": [
     {
       "name": "Arto Hellas",
       "number": "040-123456",
@@ -21,14 +21,24 @@
       "id": 4
     },
     {
-      "name": "Vanha Tuttu",
+      "name": "Puoli Tuttu",
       "number": "050-9876543",
       "id": 5
     },
     {
-      "name": "Uusi Kaveri",
+      "name": "Uusi Ystävä",
       "number": "040-9876543",
       "id": 6
+    },
+    {
+      "name": "Suku Lainen",
+      "number": "050-4567382",
+      "id": 7
+    },
+    {
+      "name": "Työ Kaveri",
+      "number": "040-3897234",
+      "id": 8
     }
   ]
 }

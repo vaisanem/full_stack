@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Searchbar from './components/Searchbar'
 import Contacts from './components/Contacts'
+import contactService from './services/contacts'
 
 const App = () => {
-  const [ persons, setPersons] = useState([]) 
+  const [ contacts, setContacts] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ query, setQuery ] = useState("")
 
   const getContacts = () => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then( response => setPersons(response.data))
+    contactService
+      .getAll()
+      .then( response => setContacts(response.data))
   }
 
   const addContact = (event) => {
     event.preventDefault()
     if (!checkIfExists()) {
-      const person = {
+      const contact = {
         name: newName,
         number: newNumber
       }
-      axios
-        .post("http://localhost:3001/persons", person)
-      setPersons(persons.concat(person))
-      setNewName('')
-      setNewNumber('')
+      contactService
+        .create(contact)
+        .then(response => {
+          setContacts(contacts.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
@@ -39,7 +41,7 @@ const App = () => {
   const handleQueryChange = (event) => setQuery(event.target.value.toLowerCase())
 
   const checkIfExists = () => {
-    const present = persons.filter( one => one.number === newNumber )
+    const present = contacts.filter( one => one.number === newNumber )
     if (present.length === 1) {
       alert(`${newNumber} on jo luettelossa`)
 
@@ -72,7 +74,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      <ul> <Contacts persons = { persons } query = { query }/> </ul>
+      <ul> <Contacts contacts = { contacts } query = { query }/> </ul>
     </div>
   )
 

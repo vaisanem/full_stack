@@ -24,7 +24,7 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    if (!id === null) {
+    if (id === null) {
       contactService
         .create(contact)
         .then(response => {
@@ -33,9 +33,7 @@ const App = () => {
           setNewNumber('')
         })
       displayInfo("Yhteystieto lisätty.")
-    } else {
-      replaceContact(id, contact)
-    }  
+    } else replaceContact(id, contact)  
   }
 
   const replaceContact = (id, contact) => {

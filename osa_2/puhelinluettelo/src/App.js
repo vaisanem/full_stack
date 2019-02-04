@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Searchbar from './components/Searchbar'
 import Contacts from './components/Contacts'
 import contactService from './services/contacts'
+import Info from './components/Info'
 
 const App = () => {
   const [ contacts, setContacts] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ query, setQuery ] = useState("")
+  const [ info, setInfo ] = useState(null)
 
   const getContacts = () => {
     contactService
@@ -30,9 +32,10 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+      displayInfo("Yhteystieto lisätty.")
     } else {
       replaceContact(id, contact)
-    }
+    }  
   }
 
   const replaceContact = (id, contact) => {
@@ -47,6 +50,7 @@ const App = () => {
             one => one.id !== id
           )
           setContacts(filtered.concat(response.data))
+          displayInfo("Yhteystieto päivitetty.")
         })
     }
   }
@@ -61,6 +65,7 @@ const App = () => {
         one => one.id !== contact.id
       )
       setContacts(filtered)
+      displayInfo("Yhteystieto poistettu.")
     }
   }
 
@@ -78,11 +83,19 @@ const App = () => {
       return present[0].id
     }
     return null
-  } 
+  }
+  
+  const displayInfo = (message) => {
+    setInfo(message)
+    setTimeout(() => {
+      setInfo(null)
+    }, 5000)
+  }
 
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <Info message={ info }/>
       <Searchbar query = { query } listener = { handleQueryChange }/>
       <h4>Lisää uusi yhteystieto</h4>
       <form onSubmit={ addContact }>

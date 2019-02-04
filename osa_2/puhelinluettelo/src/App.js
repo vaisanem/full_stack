@@ -17,17 +17,36 @@ const App = () => {
 
   const addContact = (event) => {
     event.preventDefault()
-    if (!checkIfExists()) {
-      const contact = {
-        name: newName,
-        number: newNumber
-      }
+    const id = checkIfExists()
+    const contact = {
+      name: newName,
+      number: newNumber
+    }
+    if (!id === null) {
       contactService
         .create(contact)
         .then(response => {
           setContacts(contacts.concat(response.data))
           setNewName('')
           setNewNumber('')
+        })
+    } else {
+      replaceContact(id, contact)
+    }
+  }
+
+  const replaceContact = (id, contact) => {
+    const confirm = window.confirm(
+      `${contact.number} on jo luettelossa, korvataanko nimitiedoksi ${contact.name}?`
+    )
+    if (confirm) {
+      contactService
+        .update(id, contact)
+        .then(response => {
+          const filtered = contacts.filter(
+            one => one.id !== id
+          )
+          setContacts(filtered.concat(response.data))
         })
     }
   }
@@ -56,12 +75,9 @@ const App = () => {
   const checkIfExists = () => {
     const present = contacts.filter( one => one.number === newNumber )
     if (present.length === 1) {
-      alert(`${newNumber} on jo luettelossa`)
-
-      return true
+      return present[0].id
     }
-
-    return false
+    return null
   } 
 
   return (

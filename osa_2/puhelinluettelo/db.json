@@ -1,17 +1,17 @@
 {
   "contacts": [
     {
-      "name": "Arto Hellas",
+      "name": "Arto Kreikka",
       "number": "040-123456",
       "id": 1
     },
     {
-      "name": "Martti Tienari",
+      "name": "Martta Tienari",
       "number": "040-123457",
       "id": 2
     },
     {
-      "name": "Arto Järvinen",
+      "name": "Arto Numminen",
       "number": "040-123458",
       "id": 3
     },

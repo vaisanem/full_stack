@@ -19,6 +19,15 @@ const contacts = [
   }
 ]
 
+app.get("/info", (req, res) => {
+  res.send( 
+    '<div>'
+      + `<p> Puhelinluettelossa ${contacts.length} henkilön tiedot </p>`
+      + `<p> ${Date()} </p>`
+      + '</div>' 
+  )
+})
+
 app.get("/api/contacts", (req, res) => {
   res.json(contacts)
 })

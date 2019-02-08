@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/contacts
+Content-Type: application/json
+
+{
+  "name": "Joku Tuttava",
+  "number": "040-2352728"
+}

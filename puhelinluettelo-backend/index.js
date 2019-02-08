@@ -32,5 +32,15 @@ app.get("/api/contacts", (req, res) => {
   res.json(contacts)
 })
 
+app.get("/api/contacts/:id", (req, res) => {
+  const id = Number(req.params.id)
+  found = contacts.find( one => one.id === id)
+  if (found) {
+    res.json(found)
+  } else {
+    res.status(404).end()
+  }
+})
+
 const PORT = 3001
 app.listen(PORT)

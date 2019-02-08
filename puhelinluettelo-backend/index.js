@@ -22,6 +22,12 @@ let contacts = [
   }
 ]
 
+const numberExists = (number) => {
+  return contacts.find(
+    one => one.number === number
+  )
+}
+
 app.get("/info", (req, res) => {
   res.send( 
     '<div>'
@@ -37,7 +43,7 @@ app.get("/api/contacts", (req, res) => {
 
 app.get("/api/contacts/:id", (req, res) => {
   const id = Number(req.params.id)
-  found = contacts.find( one => one.id === id)
+  found = contacts.find(one => one.id === id)
   if (found) {
     res.json(found)
   } else {
@@ -46,8 +52,22 @@ app.get("/api/contacts/:id", (req, res) => {
 })
 
 app.post("/api/contacts", (req, res) => {
-  const contact = req.body
-  contact.id = Math.ceil(Math.random() * 1000)
+  if (!req.body.name || !req.body.number) {
+    return res.status(400).json({
+      error: "Name and number must be provided."
+    })
+  }
+  if (numberExists(req.body.number)) {
+    return res.status(409).json({
+      error: "Number is already registered."
+    })
+  }
+
+  const contact = {
+    id: Math.ceil(Math.random() * 1000),
+    name: req.body.name,
+    number: req.body.number
+  }
   contacts.push(contact)
   res.status(201).send(contact)
 })

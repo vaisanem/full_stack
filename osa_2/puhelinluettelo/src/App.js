@@ -28,11 +28,15 @@ const App = () => {
       contactService
         .create(contact)
         .then(response => {
-          setContacts(contacts.concat(response.data))
-          setNewName('')
-          setNewNumber('')
-        })
-      displayInfo("Yhteystieto lisätty.")
+            setContacts(contacts.concat(response.data))
+            setNewName('')
+            setNewNumber('')
+            displayInfo("Yhteystieto lisätty.")
+          },
+          error => {
+            displayInfo(error.response.data.error)
+          }
+        )
     } else replaceContact(id, contact)  
   }
 

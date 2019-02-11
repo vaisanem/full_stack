@@ -19,12 +19,12 @@ const App = () => {
 
   const addContact = (event) => {
     event.preventDefault()
-    const id = checkIfExists()
+    const found = checkIfExists()
     const contact = {
       name: newName,
       number: newNumber
     }
-    if (id === null) {
+    if (!found) {
       contactService
         .create(contact)
         .then(response => {
@@ -37,7 +37,7 @@ const App = () => {
             displayInfo(error.response.data.error)
           }
         )
-    } else replaceContact(id, contact)  
+    } else replaceContact(found.id, contact)  
   }
 
   const replaceContact = (id, contact) => {
@@ -80,11 +80,7 @@ const App = () => {
   const handleQueryChange = (event) => setQuery(event.target.value.toLowerCase())
 
   const checkIfExists = () => {
-    const present = contacts.filter( one => one.number === newNumber )
-    if (present.length === 1) {
-      return present[0].id
-    }
-    return null
+    return contacts.find( one => one.number === newNumber )
   }
   
   const displayInfo = (message) => {

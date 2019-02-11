@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 const contactSchema = new mongoose.Schema({
   name: String,
@@ -19,7 +19,7 @@ const Contact = mongoose.model("Contact", contactSchema)
 
 if (process.argv[3] && process.argv[4]) {
   const contact = new Contact({
-    name: process.argv[3], 
+    name: process.argv[3],
     number: process.argv[4]
   })
   contact.save().then(result => {

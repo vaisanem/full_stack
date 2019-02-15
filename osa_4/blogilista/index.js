@@ -1,6 +1,7 @@
 const config = require('./utils/config')
-const app = require('./app')
+//const app = require('./app')
+const blog_controller = require('./controllers/blogs')
 
-app.listen(config.PORT, () => {
+blog_controller.listen(config.PORT, () => {
   console.log(`Server running on port ${config.PORT}`)
 })

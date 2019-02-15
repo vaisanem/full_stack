@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"All tests passed\"",
-    "watch": "nodemon index.js"
+    "test": "jest --verbose",
+    "watch": "nodemon index.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "dotenv": "^6.2.0",
@@ -15,6 +16,8 @@
   "author": "vaisanem",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^5.13.0",
+    "jest": "^24.1.0",
     "nodemon": "^1.18.10"
   }
 }

@@ -9,12 +9,10 @@ test('dummy returns one', () => {
 
 const blogs = [
   {
-    _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
-    likes: 0,
-    __v: 0
+    likes: 0
   }
 ]
 
@@ -50,14 +48,45 @@ describe('favourite blog', () => {
 
   test('is unambiguous when one has more likes than others', () => {
     blogs[2] = {
-      _id: '5a422ba71b54a676234d17fb',
       title: 'TDD harms architecture',
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-      likes: 8,
-      __v: 0
+      likes: 8
     }
 
-    expect(blogs[2]).toMatchObject(listHelpers.favouriteBlog(blogs))
+    expect(listHelpers.favouriteBlog(blogs)).toMatchObject(blogs[2])
+  })
+
+  test('is given correctly when many possible solutions', () => {
+    blogs[1].likes = 8
+    const correct = blogs.slice(1, 3)
+
+    expect(correct).toContainEqual(listHelpers.favouriteBlog(blogs))
+  })
+})
+
+describe('most blogs', () => {
+  const correct = {
+    author: 'Michael Chan',
+    blogs: 2
+  }
+
+  test('empty list does not define such', () => {
+    expect(listHelpers.mostBlogs([])).toBeNull()
+  })
+
+  test('is unambiguous when one has more blogs than others', () => {
+
+    expect(listHelpers.mostBlogs(blogs)).toEqual(correct)
+  })
+
+  test('is given correctly when many possible solutions', () => {
+    blogs[3] = blogs[2]
+    const corrects = [correct, {
+      author: 'Robert C. Martin',
+      blogs: 2
+    }]
+
+    expect(corrects).toContainEqual(listHelpers.mostBlogs(blogs))
   })
 })

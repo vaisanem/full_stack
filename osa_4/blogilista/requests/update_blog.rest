@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/5c669fe87a38146d40e91d6b
+Content-Type: application/json
+
+{
+  "title": "Muokattu",
+  "author": "Blogi",
+  "url": "localhost:3003/api/blogs/5c669fe87a38146d40e91d6b",
+  "likes": 0
+}

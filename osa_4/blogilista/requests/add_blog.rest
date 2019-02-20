@@ -1,5 +1,6 @@
 POST http://localhost:3003/api/blogs
-Content-Type: application-json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.NWM2ZDZiMWZhMmExMjY1MWExYzQ3ZjYw.Thv77r1YUYV5MqAsywtUrzUB0XsKii0eTUGzO8S8VHI
+Content-Type: application/json
 
 {
   "title": "Italialainen pestopasta",

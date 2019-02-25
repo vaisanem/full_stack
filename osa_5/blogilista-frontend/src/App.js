@@ -56,18 +56,18 @@ const App = () => {
         {infoSection()}
         <Login setUser={setUser} showInfo={showInfo} />
       </div>
-    )  
+    )
   }
 
   blogService.setToken(user.token)
-  
+
   return (
     <div>
       <h2>blogilista</h2>
       {infoSection()}
       <p>{user.username} kirjautuneena</p>
       {logout()}
-      <BlogForm user={user} blogs={blogs} setBlogs= {setBlogs} showInfo={showInfo} />
+      <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showInfo={showInfo} />
       <h2>lista blogeista</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />

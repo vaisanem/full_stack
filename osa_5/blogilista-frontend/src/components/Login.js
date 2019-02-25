@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
+import PropTypes from 'prop-types'
 
 const Login = ({ setUser, showInfo }) => {
 
@@ -30,7 +31,7 @@ const Login = ({ setUser, showInfo }) => {
       <form onSubmit={handleLogin}>
         <div>
           käyttäjätunnus
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
@@ -39,7 +40,7 @@ const Login = ({ setUser, showInfo }) => {
         </div>
         <div>
           salasana
-            <input
+          <input
             type="password"
             value={password}
             name="Password"
@@ -51,6 +52,11 @@ const Login = ({ setUser, showInfo }) => {
 
     </div>
   )
+}
+
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  showInfo: PropTypes.func.isRequired
 }
 
 export default Login

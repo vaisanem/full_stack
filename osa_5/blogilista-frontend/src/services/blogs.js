@@ -14,8 +14,8 @@ const create = async (attributes) => {
   const headers = {
     Authorization: `Bearer ${token}`
   }
-  
-  const response = await axios.post(baseUrl, attributes, {headers: headers})
+
+  const response = await axios.post(baseUrl, attributes, { headers: headers })
   return response.data
 }
 

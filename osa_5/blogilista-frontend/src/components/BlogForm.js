@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
 const BlogForm = ({ blogs, setBlogs, showInfo }) => {
@@ -25,7 +25,6 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
       setLikes('')
       showInfo(`uusi blogi ${blog.title} lisätty`)
     } catch(error) {
-      console.log(error.message)
       showInfo('blogisi sisältää arvojemme vastaista sisältöä')
     }
   }
@@ -33,7 +32,7 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
   const input = (field, listener) => {
 
     return (
-      <input 
+      <input
         type='text'
         value={field}
         onChange={({ target }) => listener(target.value)}

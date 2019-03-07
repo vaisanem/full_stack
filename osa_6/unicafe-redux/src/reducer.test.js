@@ -4,7 +4,7 @@ import counterReducer from './reducer'
 describe('unicafe reducer', () => {
   const initialState = {
     good: 0,
-    ok: 0,
+    neutral: 0,
     bad: 0
   }
   deepFreeze(initialState)
@@ -26,20 +26,20 @@ describe('unicafe reducer', () => {
     const newState = counterReducer(initialState, action)
     expect(newState).toEqual({
       good: 1,
-      ok: 0,
+      neutral: 0,
       bad: 0
     })
   })
 
   test('neutral is incremented', () => {
     const action = {
-      type: 'OK'
+      type: 'NEUTRAL'
     }
 
     const newState = counterReducer(initialState, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 1,
+      neutral: 1,
       bad: 0
     })
   })
@@ -52,18 +52,18 @@ describe('unicafe reducer', () => {
     const newState = counterReducer(initialState, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 0,
+      neutral: 0,
       bad: 1
     })
   })
 
   test('reset works', () => {
     const action = {
-      type: 'ZERO'
+      type: 'RESET'
     }
     const state = {
       good: 1,
-      ok: 0,
+      neutral: 0,
       bad: 2
     }
     deepFreeze(state)

@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import Form from './components/anecdoteForm'
 
 const App = ({ store }) => {
   let anecdotes = store.getState()
@@ -9,6 +10,15 @@ const App = ({ store }) => {
       type: 'VOTE',
       id: id
     })
+  }
+
+  const addAnecdote = (event) => {
+    event.preventDefault()
+    anecdotes = store.dispatch({
+      type: 'ADD',
+      anecdote: event.target.anecdote.value
+    })
+    event.target.anecdote.value = ''
   }
   
   return (
@@ -26,10 +36,7 @@ const App = ({ store }) => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
-      </form>
+      <Form listener = {addAnecdote} />
     </div>
   )
 }

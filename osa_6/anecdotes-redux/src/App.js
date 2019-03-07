@@ -6,19 +6,10 @@ const App = ({ store }) => {
   
   const vote = (id) => {
     console.log('vote', id)
-    anecdotes = store.dispatch({
+    store.dispatch({
       type: 'VOTE',
       id: id
     })
-  }
-
-  const addAnecdote = (event) => {
-    event.preventDefault()
-    anecdotes = store.dispatch({
-      type: 'ADD',
-      anecdote: event.target.anecdote.value
-    })
-    event.target.anecdote.value = ''
   }
   
   return (
@@ -36,7 +27,7 @@ const App = ({ store }) => {
         </div>
       )}
       <h2>create new</h2>
-      <Form listener = {addAnecdote} />
+      <Form store = {store} />
     </div>
   )
 }

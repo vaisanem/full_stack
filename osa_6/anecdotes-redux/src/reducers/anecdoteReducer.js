@@ -17,6 +17,10 @@ const asObject = (anecdote) => {
   }
 }
 
+const votesDescending = (a, b) => {
+  return b.votes - a.votes
+}
+
 const initialState = anecdotesAtStart.map(asObject)
 
 const vote = (state, action) => {
@@ -30,7 +34,7 @@ const vote = (state, action) => {
       const anecdotes = [ ...state ]
       const i = anecdotes.indexOf(anecdote)
       anecdotes[i].votes++
-      return anecdotes
+      return anecdotes.sort(votesDescending)
   }
 }
 
@@ -39,9 +43,14 @@ const reducer = (state = initialState, action) => {
   console.log('action', action)
 
   switch(action.type) {
-    case 'VOTE': return vote(state, action)
-    case 'ADD': return state.concat(asObject(action.anecdote))
-    default: return state
+    case 'VOTE': 
+      return vote(state, action)
+    case 'ADD': 
+      return state
+        .concat(asObject(action.anecdote))
+        .sort(votesDescending)
+    default: 
+      return state
   }
   
 }

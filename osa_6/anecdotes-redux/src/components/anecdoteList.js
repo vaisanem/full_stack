@@ -1,14 +1,12 @@
 import React from 'react'
+import { votingAction } from '../reducers/anecdoteReducer'
 
 const anecdoteList = ({ store }) => {
   const anecdotes = store.getState()
 
   const vote = (id) => {
     console.log('vote', id)
-    store.dispatch({
-      type: 'VOTE',
-      id: id
-    })
+    store.dispatch(votingAction(id))
   }
 
   return (

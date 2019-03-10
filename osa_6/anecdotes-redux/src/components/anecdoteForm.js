@@ -1,13 +1,11 @@
 import React from 'react'
+import { addingAction } from '../reducers/anecdoteReducer'
 
 const anecdoteForm = ({ store }) => {
 
   const addAnecdote = (event) => {
     event.preventDefault()
-    store.dispatch({
-      type: 'ADD',
-      anecdote: event.target.anecdote.value
-    })
+    store.dispatch(addingAction(event.target.anecdote.value))
     event.target.anecdote.value = ''
   }
 

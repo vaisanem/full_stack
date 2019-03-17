@@ -44,7 +44,6 @@ const vote = (state, action) => {
     case undefined:
       return state
     default:
-      console.log(anecdote)
       const anecdotes = [ ...state ]
       const i = anecdotes.indexOf(anecdote)
       anecdotes[i].votes++

@@ -1,11 +1,15 @@
 import React from 'react'
 import { addingAction } from '../reducers/anecdoteReducer'
+import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
-const anecdoteForm = ({ store }) => {
+const AnecdoteForm = ({ store }) => {
 
   const addAnecdote = (event) => {
     event.preventDefault()
     store.dispatch(addingAction(event.target.anecdote.value))
+    clearTimeout(store.getState().info.reset)
+    const reset = setTimeout(() => store.dispatch(resetInfoAction()), 5000)
+    store.dispatch(setInfoAction(`you added '${event.target.anecdote.value}'`, reset))
     event.target.anecdote.value = ''
   }
 
@@ -21,4 +25,4 @@ const anecdoteForm = ({ store }) => {
   )
 }
 
-export default anecdoteForm
+export default AnecdoteForm

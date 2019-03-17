@@ -1,12 +1,17 @@
 import React from 'react'
 import { votingAction } from '../reducers/anecdoteReducer'
+import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
-const anecdoteList = ({ store }) => {
-  const anecdotes = store.getState()
+const AnecdoteList = ({ store }) => {
+  const anecdotes = store.getState().anecdotes
 
   const vote = (id) => {
     console.log('vote', id)
     store.dispatch(votingAction(id))
+    const anecdote = anecdotes.find(one => one.id === id)
+    clearTimeout(store.getState().info.reset)
+    const reset = setTimeout(() => store.dispatch(resetInfoAction()), 5000)
+    store.dispatch(setInfoAction(`you voted for '${anecdote.content}'`, reset))
   }
 
   return (
@@ -26,4 +31,4 @@ const anecdoteList = ({ store }) => {
   )
 }
 
-export default anecdoteList
+export default AnecdoteList

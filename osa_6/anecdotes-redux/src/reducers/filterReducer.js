@@ -1,22 +1,13 @@
-const filterAction = (anecdotes, word) => {
+const filterAction = (filter) => {
   return {
     type: 'FILTER',
-    anecdotes: anecdotes,
-    word: word
+    filter: filter
   }
 }
 
-const reducer = (state = {}, action) => {
+const reducer = (state = '', action) => {
   switch(action.type) {
-    case 'FILTER': {
-      return {
-        anecdotes: action.anecdotes.filter(one => one
-          .content.toLowerCase()
-          .includes(action.word.toLowerCase())
-        ),
-        word: action.word
-      }
-    } 
+    case 'FILTER': return action.filter
     default: return state
   }
 }

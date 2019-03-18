@@ -1,7 +1,6 @@
 import React from 'react'
 import { addingAction } from '../reducers/anecdoteReducer'
 import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
-import { filterAction } from '../reducers/filterReducer'
 
 const AnecdoteForm = ({ store }) => {
 
@@ -12,7 +11,6 @@ const AnecdoteForm = ({ store }) => {
     const reset = setTimeout(() => store.dispatch(resetInfoAction()), 5000)
     store.dispatch(setInfoAction(`you added '${event.target.anecdote.value}'`, reset))
     event.target.anecdote.value = ''
-    store.dispatch(filterAction(store.getState().anecdotes, store.getState().filter.word))
   }
 
   return (

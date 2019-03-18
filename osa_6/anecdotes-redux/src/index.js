@@ -14,11 +14,7 @@ const reducer = combineReducers({
 })
 
 const initialState = {
-  anecdotes: initialAnecdotes,
-  filter: {
-    anecdotes: initialAnecdotes,
-    word: ''
-  }
+  anecdotes: initialAnecdotes
 }
 
 const store = createStore(reducer, initialState)

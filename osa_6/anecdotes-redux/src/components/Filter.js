@@ -3,7 +3,7 @@ import { filterAction } from '../reducers/filterReducer'
 
 const Filter = ({ store }) => {
   const handleChange = (event) => {
-    store.dispatch(filterAction(store.getState().anecdotes, event.target.value))
+    store.dispatch(filterAction(event.target.value))
   }
   const style = {
     marginBottom: 10

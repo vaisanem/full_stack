@@ -69,4 +69,4 @@ const reducer = (state = initialState, action) => {
 }
 
 export default reducer
-export { votingAction, addingAction }
+export { votingAction, addingAction, initialState as initialAnecdotes }

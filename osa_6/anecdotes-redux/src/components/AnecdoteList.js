@@ -3,7 +3,7 @@ import { votingAction } from '../reducers/anecdoteReducer'
 import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
 const AnecdoteList = ({ store }) => {
-  const anecdotes = store.getState().anecdotes
+  const anecdotes = store.getState().filter.anecdotes
 
   const vote = (id) => {
     console.log('vote', id)

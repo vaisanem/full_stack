@@ -16,7 +16,10 @@ const Button = ({properties}) => {
 const Stats = ({properties}) => {
 
   return (
-    <p> {properties.name} {properties.count} </p>
+    <tr>
+      <td>{properties.name}</td>
+      <td>{properties.count}</td>
+    </tr>
   )
 }
 
@@ -26,14 +29,16 @@ const Statistics = ({attributes}) => {
   if (all.count === 0) return <p> ei palautteita </p>
 
   return (
-    <>
-      <Stats properties = {good}/>
-      <Stats properties = {neutral}/>
-      <Stats properties = {bad}/>
-      <Stats properties = {all}/>
-      <Stats properties = {average}/>
-      <Stats properties = {positive}/>
-    </>
+    <table>
+      <tbody>
+        <Stats properties = {good}/>
+        <Stats properties = {neutral}/>
+        <Stats properties = {bad}/>
+        <Stats properties = {all}/>
+        <Stats properties = {average}/>
+        <Stats properties = {positive}/>
+      </tbody>
+    </table>
   )
 }
 

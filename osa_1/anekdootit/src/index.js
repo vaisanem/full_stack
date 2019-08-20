@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
-const Button = ({listener}) => {
+const Shuffle = ({listener}) => {
 
   return (
     <button onClick={() => listener()}>
@@ -10,19 +10,56 @@ const Button = ({listener}) => {
   )
 }
 
+const Vote = ({listener}) => {
+
+  return (
+    <button onClick={() => listener()}>
+      vote
+    </button>
+  )
+}
+
 const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
-  const listener = () => {
+  const [votes, setVotes] = useState([])
+  const [top, setTop] = useState(0)
+
+  useEffect(() => {
+    const init = anecdotes.map(() => 0)
+    setVotes(init)
+  }, [])
+
+  const shuffleListener = () => {
     const index = Math.floor(Math.random() * anecdotes.length)
     setSelected(index)
   }
+  const voteListener = () => {
+    const updated = [].concat(votes)
+    updated[selected] = updated[selected] + 1
+    let index = updated.indexOf(updated[top] + 1)
+    index = (index >= 0) ? index : top
+    setVotes(updated)
+    setTop(index)
+  }
 
   return (
-    <div>
-      {anecdotes[selected]}
-      <br></br>
-      <Button listener = {listener}/>
-    </div>
+    <>
+      <div>
+        <h2>Anecdote of the day</h2>
+        {anecdotes[selected]}
+        <br></br>
+        has {votes[selected]} votes
+        <br></br>
+        <Vote listener = {voteListener}/>
+        <Shuffle listener = {shuffleListener}/>
+      </div>
+      <div>
+        <h2>Anecdote with the most votes</h2>
+        {anecdotes[top]}
+        <br></br>
+        has {votes[top]} votes
+      </div>
+    </>
   )
 }
 

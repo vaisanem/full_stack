@@ -90,3 +90,31 @@ describe('most blogs', () => {
     expect(corrects).toContainEqual(listHelpers.mostBlogs(blogs))
   })
 })
+
+describe('most likes', () => {
+  const correct = {
+    author: 'Robert C. Martin',
+    likes: 24
+  }
+
+  test('empty list does not define such', () => {
+
+    expect(listHelpers.mostLikes([])).toBeNull()
+  })
+
+  test('is unambiguous when one has more blogs than others', () => {
+    blogs[4] = blogs[3]
+
+    expect(listHelpers.mostLikes(blogs)).toEqual(correct)
+  })
+
+  test('is given correctly when many possible solutions', () => {
+    blogs[5] = blogs[0]
+    const corrects = [correct, {
+      author: 'Michael Chan',
+      likes: 24
+    }]
+
+    expect(corrects).toContainEqual(listHelpers.mostLikes(blogs))
+  })
+})

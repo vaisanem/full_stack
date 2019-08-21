@@ -35,11 +35,31 @@ const mostBlogs = (blogs) => {
   }
 }
 
+const mostLikes = (blogs) => {
+  let authors = blogs.map(one => one.author)
+  authors = lodash.uniq(authors)
+  const counts = []
+  authors.forEach(author => {
+    counts.push({
+      author: author,
+      likes: blogs
+        .filter(blog => blog.author === author)
+        .reduce((all, one) => all + one.likes, 0)
+    })
+  })
+  const compare = (a, b) => {
+    return b.likes - a.likes
+  }
+  counts.sort(compare)
+  return (counts[0]) ? counts[0] : null
+}
+
 const likesDescending = (a, b) => b.likes - a.likes
 
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }

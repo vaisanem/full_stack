@@ -15,6 +15,7 @@ const getToken = request => {
 blogsRouter.get('/', (request, response) => {
   Blog
     .find({})
+    .populate('user', '-blogs')
     .then(blogs => {
       response.json(blogs)
     })

@@ -6,6 +6,16 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    request.token = authorization.substring(7)
+    return next()
+  }
+  request.token = null
+  next()
+}
+
 const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({
@@ -16,10 +26,12 @@ const errorHandler = (error, request, response, next) => {
       error: error.message
     })
   } else if (error.name === 'JsonWebTokenError') {
+    console.log(error.name)
     return response.status(401).json({
       error: 'invalid token'
     })
   }
+
   next()
 }
 
@@ -29,6 +41,7 @@ const unknownEndpoint = (request, response) => {
 
 module.exports = {
   requestLogger,
+  tokenExtractor,
   errorHandler,
   unknownEndpoint
 }

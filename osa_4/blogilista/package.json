@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "watch": "nodemon index.js",
     "lint": "eslint ."
   },
@@ -22,6 +22,7 @@
   "devDependencies": {
     "eslint": "^5.13.0",
     "jest": "^24.1.0",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "supertest": "^4.0.2"
   }
 }

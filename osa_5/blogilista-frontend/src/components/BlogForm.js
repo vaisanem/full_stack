@@ -6,6 +6,7 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
   const [ author, setAuthor ] = useState('')
   const [ url, setUrl ] = useState('')
   const [ likes, setLikes ] = useState('')
+  const [ visible, setVisible ] = useState(false)
 
   const onSubmit = async (event) => {
     event.preventDefault()
@@ -40,6 +41,21 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
     )
   }
 
+  const visibility = (option) => {
+    setVisible(option)
+  }
+
+  if (!visible) {
+
+    return (
+      <div>
+        <form onSubmit={() => visibility(true)}>
+          <button type='submit'>lisää blogi</button>
+        </form>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>lisää blogi</h2>
@@ -56,7 +72,10 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
         Tykkäykset
         {input(likes, setLikes)}
         <br/>
-        <button type='submit'>lisää</button>
+        <button type='submit'>lisää blogi</button>
+      </form>
+      <form onSubmit={() => visibility(false)}>
+        <button type='submit'>peruuta</button>
       </form>
     </div>
   )

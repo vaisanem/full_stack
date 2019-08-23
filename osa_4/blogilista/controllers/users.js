@@ -7,12 +7,20 @@ usersRouter.get('/', async (request, response) => {
 })
 
 usersRouter.post('/', async (request, response, next) => {
+
+  const password = request.body.password
+  if (!password || password.length < 3) {
+    response.status(400).json({
+      error: 'Given password is shorter than the minimum allowed length (3).'
+    })
+  }
+
   const saltRounds = 10
   const user = new User({
     username: request.body.username,
     name: request.body.name,
     passwordHash: await bcrypt.hash(request.body.password, saltRounds),
-    notes: []
+    blogs: []
   })
 
   try {

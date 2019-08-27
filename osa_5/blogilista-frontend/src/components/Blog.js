@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
 
   const [ expand, setExpand ] = useState(false)
 
@@ -8,17 +8,20 @@ const Blog = ({ blog }) => {
     cursor: 'pointer',
     border: '1px solid',
     padding: '2px',
-    margin: '5px'
+    margin: '5px',
+    borderRadius: '5px',
+    backgroundColor: 'lightgrey'
   }
-  style['border-radius'] = '5px'
-  style['background-color'] = 'lightgrey'
 
   return (
     <div onClick={() => setExpand(!expand)} style={style}>
       {blog.title} {blog.author}
       <div style={{ display: expand ? '' : 'none' }}>
         <p>{blog.url}</p>
-        <p>{blog.likes} likes</p>
+        <div>
+          <>{blog.likes} tykkäystä </>
+          <button onClick={() => like(blog)}>tykkää</button>
+        </div>
         <p>added by {blog.user.username}</p>
       </div>
     </div>

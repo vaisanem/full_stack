@@ -47,6 +47,27 @@ const App = () => {
     )
   }
 
+  const like = async (blog) => {
+    const attributes = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      id: blog.id
+    }
+    try {
+      let updated = await blogService.update(attributes)
+      updated = [].concat(blogs)
+      updated = updated.map(one => {
+        if (one.id === blog.id) one.likes++
+        return one
+      })
+      setBlogs(updated)
+    } catch(error) {
+      showInfo(error.message)
+    }
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -77,7 +98,7 @@ const App = () => {
       </Togglable>
       <h2>lista blogeista</h2>
       {[].concat(blogs).sort(compare).map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} like={like} />
       )}
     </div>
   )

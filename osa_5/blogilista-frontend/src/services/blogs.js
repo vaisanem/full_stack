@@ -19,4 +19,9 @@ const create = async (attributes) => {
   return response.data
 }
 
-export default { getAll, create, setToken }
+const update = async (attributes) => {
+  const response = await axios.put(baseUrl.concat('/', attributes.id), attributes)
+  return response.data
+}
+
+export default { getAll, create, update, setToken }

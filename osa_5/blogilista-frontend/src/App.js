@@ -56,12 +56,23 @@ const App = () => {
       id: blog.id
     }
     try {
-      let updated = await blogService.update(attributes)
-      updated = [].concat(blogs)
+      await blogService.update(attributes)
+      let updated = [].concat(blogs)
       updated = updated.map(one => {
         if (one.id === blog.id) one.likes++
         return one
       })
+      setBlogs(updated)
+    } catch(error) {
+      showInfo(error.message)
+    }
+  }
+
+  const remove = async (id) => {
+    try {
+      await blogService.remove(id)
+      let updated = [].concat(blogs)
+      updated = updated.filter(one => one.id !== id)
       setBlogs(updated)
     } catch(error) {
       showInfo(error.message)
@@ -98,7 +109,7 @@ const App = () => {
       </Togglable>
       <h2>lista blogeista</h2>
       {[].concat(blogs).sort(compare).map(blog =>
-        <Blog key={blog.id} blog={blog} like={like} />
+        <Blog key={blog.id} blog={blog} like={like} remove={remove} />
       )}
     </div>
   )

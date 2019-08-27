@@ -27,11 +27,26 @@ blogsRouter.post('/', async (request, response, next) => {
     const attributes = request.body
     attributes.user = user.id
     const blog = new Blog(attributes)
-
     const savedBlog = await blog.save()
     user.blogs.push(savedBlog.id)
     await user.save()
-    response.status(201).json(savedBlog)
+    const returnBlog = {
+      title: savedBlog.title,
+      author: savedBlog.author,
+      url: savedBlog.url,
+      likes: savedBlog.likes,
+      id: savedBlog.id,
+      user: {
+        username: user.username,
+        name: user.name
+      }
+    }
+    savedBlog.user = {
+      username: user.username,
+      name: user.name
+    }
+    console.log(savedBlog)
+    response.status(201).json(returnBlog)
   } catch(error) {
     next(error)
   }

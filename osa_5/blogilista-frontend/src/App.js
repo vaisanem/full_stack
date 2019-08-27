@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -28,6 +29,10 @@ const App = () => {
         <p>{info}</p>
       </div>
     )
+  }
+
+  const compare = (a, b) => {
+    return b.likes - a.likes
   }
 
   const logout = () => {
@@ -67,9 +72,11 @@ const App = () => {
       {infoSection()}
       <p>{user.username} kirjautuneena</p>
       {logout()}
-      <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showInfo={showInfo} />
+      <Togglable init={false} label={'lisää blogi'}>
+        <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showInfo={showInfo} />
+      </Togglable>
       <h2>lista blogeista</h2>
-      {blogs.map(blog =>
+      {[].concat(blogs).sort(compare).map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div>

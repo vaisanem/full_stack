@@ -41,11 +41,6 @@ blogsRouter.post('/', async (request, response, next) => {
         name: user.name
       }
     }
-    savedBlog.user = {
-      username: user.username,
-      name: user.name
-    }
-    console.log(savedBlog)
     response.status(201).json(returnBlog)
   } catch(error) {
     next(error)

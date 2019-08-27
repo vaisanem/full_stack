@@ -68,11 +68,15 @@ const App = () => {
     }
   }
 
-  const remove = async (id) => {
+  const remove = async (blog) => {
+    const confirm = window.confirm(
+      'Poistetaanko '.concat(blog.title, ', ',  blog.author,'?')
+    )
+    if (!confirm) return
     try {
-      await blogService.remove(id)
+      await blogService.remove(blog.id)
       let updated = [].concat(blogs)
-      updated = updated.filter(one => one.id !== id)
+      updated = updated.filter(one => one.id !== blog.id)
       setBlogs(updated)
     } catch(error) {
       showInfo(error.message)
@@ -81,7 +85,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )
     setUser(JSON.parse(window.localStorage.getItem('loggedUser')))
   }, [])
@@ -109,7 +113,7 @@ const App = () => {
       </Togglable>
       <h2>lista blogeista</h2>
       {[].concat(blogs).sort(compare).map(blog =>
-        <Blog key={blog.id} blog={blog} like={like} remove={remove} />
+        <Blog key={blog.id} blog={blog} user={user} like={like} remove={remove} />
       )}
     </div>
   )

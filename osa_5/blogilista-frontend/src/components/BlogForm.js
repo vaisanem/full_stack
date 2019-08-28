@@ -35,16 +35,16 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
       <h2>lisää blogi</h2>
       <form onSubmit={onSubmit}>
         Nimi
-        <input {...title}/>
+        <input {... {...title, ...{reset: null}}}/>
         <br/>
         Julkaisija
-        <input {...author}/>
+        <input {... {...author, ...{reset: null}}}/>
         <br/>
         URL
-        <input {...url}/>
+        <input {... {...url, ...{reset: null}}}/>
         <br/>
         Tykkäykset
-        <input {...likes}/>
+        <input {... {...likes, ...{reset: null}}}/>
         <br/>
         <button type='submit'>lisää blogi</button>
       </form>

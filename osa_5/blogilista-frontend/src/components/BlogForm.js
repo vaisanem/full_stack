@@ -20,10 +20,10 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
     try {
       const blog = await blogService.create(attributes)
       setBlogs(blogs.concat(blog))
-      title.onChange({ target: { value: ''}})
-      author.onChange({ target: { value: ''}})
-      url.onChange({ target: { value: ''}})
-      likes.onChange({ target: { value: ''}})
+      title.reset()
+      author.reset()
+      url.reset()
+      likes.reset()
       showInfo(`uusi blogi ${blog.title} lisätty`)
     } catch(error) {
       showInfo('blogisi sisältää arvojemme vastaista sisältöä')

@@ -15,6 +15,9 @@ module.exports = {
         "jsx": true
     }
   },
+  "plugins": [
+    "react-hooks"
+  ],
   "rules": {
     "react/prop-types": 0,
     "no-console": 0,
@@ -42,6 +45,7 @@ module.exports = {
     "arrow-spacing": [
         "error", { "before": true, "after": true }
     ],
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "react-hooks/rules-of-hooks": "error"
   }
 };

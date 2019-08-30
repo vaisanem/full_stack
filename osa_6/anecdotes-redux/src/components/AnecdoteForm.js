@@ -1,15 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { addingAction } from '../reducers/anecdoteReducer'
 import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
-const AnecdoteForm = ({ store }) => {
+const AnecdoteForm = (props) => {
 
   const addAnecdote = (event) => {
     event.preventDefault()
-    store.dispatch(addingAction(event.target.anecdote.value))
-    clearTimeout(store.getState().info.reset)
-    const reset = setTimeout(() => store.dispatch(resetInfoAction()), 5000)
-    store.dispatch(setInfoAction(`you added '${event.target.anecdote.value}'`, reset))
+    props.addingAction(event.target.anecdote.value)
+    clearTimeout(props.info.reset)
+    const reset = setTimeout(() => props.resetInfoAction(), 5000)
+    props.setInfoAction(`you added '${event.target.anecdote.value}'`, reset)
     event.target.anecdote.value = ''
   }
 
@@ -25,4 +26,16 @@ const AnecdoteForm = ({ store }) => {
   )
 }
 
-export default AnecdoteForm
+const mapStateToProps = (state) => {
+  return {
+    info: state.info
+  }
+}
+
+const mapDispatchToProps = {
+  addingAction,
+  setInfoAction,
+  resetInfoAction
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteForm)

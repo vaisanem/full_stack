@@ -1,20 +1,21 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { votingAction } from '../reducers/anecdoteReducer'
 import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
-const AnecdoteList = ({ store }) => {
-  const anecdotes = store.getState().anecdotes.filter(one => one
+const AnecdoteList = (props) => {
+  const anecdotes = props.anecdotes.filter(one => one
     .content.toLowerCase()
-    .includes(store.getState().filter.toLowerCase())
+    .includes(props.filter.toLowerCase())
   )  
 
   const vote = (id) => {
     console.log('vote', id)
-    store.dispatch(votingAction(id))
+    props.votingAction(id)
     const anecdote = anecdotes.find(one => one.id === id)
-    clearTimeout(store.getState().info.reset)
-    const reset = setTimeout(() => store.dispatch(resetInfoAction()), 5000)
-    store.dispatch(setInfoAction(`you voted for '${anecdote.content}'`, reset))
+    clearTimeout(props.info.reset)
+    const reset = setTimeout(() => props.resetInfoAction(), 5000)
+    props.setInfoAction(`you voted for '${anecdote.content}'`, reset)
   }
 
   return (
@@ -34,4 +35,18 @@ const AnecdoteList = ({ store }) => {
   )
 }
 
-export default AnecdoteList
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+    filter: state.filter,
+    info: state.info
+  }
+}
+
+const mapDispatchToProps = {
+  votingAction,
+  setInfoAction,
+  resetInfoAction
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)

@@ -6,7 +6,8 @@ import App from './App'
 import anecdoteReducer from './reducers/anecdoteReducer'
 import infoReducer from './reducers/infoReducer'
 import filterReducer from './reducers/filterReducer'
-import { initialAnecdotes } from './reducers/anecdoteReducer'
+import { initAction } from './reducers/anecdoteReducer'
+import anecdoteService from './services/anecdoteService'
 
 const reducer = combineReducers({
   info: infoReducer,
@@ -14,11 +15,11 @@ const reducer = combineReducers({
   filter: filterReducer
 })
 
-const initialState = {
-  anecdotes: initialAnecdotes
-}
+const store = createStore(reducer)
 
-const store = createStore(reducer, initialState)
+anecdoteService.getAll().then(anecdotes => {
+  store.dispatch(initAction(anecdotes))
+})
 
 const render = () => {
   ReactDOM.render(

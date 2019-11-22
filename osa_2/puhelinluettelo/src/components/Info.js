@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Info = ({ message} ) => {
-  if (message === null) return <></>
+const Info = ({ info }) => {
+  if (!info) return <></>
 
   return (
-    <div className='info'>
-      <p> {message} </p>
+    <div className={info.type}>
+      <p> {info.message} </p>
     </div>
   )
 

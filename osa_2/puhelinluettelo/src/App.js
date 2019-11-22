@@ -34,7 +34,7 @@ const App = () => {
             displayInfo("Yhteystieto lisätty.")
           },
           error => {
-            displayInfo(error.response.data.error)
+            displayInfo(error.response.data.error, 'error')
           }
         )
     } else replaceContact(found.id, contact)  
@@ -51,6 +51,11 @@ const App = () => {
           const filtered = contacts.filter(
             one => one.id !== id
           )
+          if (response.data === null) {
+            setContacts(filtered)
+            displayInfo(`Numeroon ${contact.number} liittyvä yhteystieto oli jo poistettu.`, 'error')
+            return
+          }
           setContacts(filtered.concat(response.data))
           displayInfo("Yhteystieto päivitetty.")
         })
@@ -83,8 +88,8 @@ const App = () => {
     return contacts.find( one => one.number === newNumber )
   }
   
-  const displayInfo = (message) => {
-    setInfo(message)
+  const displayInfo = (message, type = 'info') => {
+    setInfo({ message: message, type: type })
     setTimeout(() => {
       setInfo(null)
     }, 5000)
@@ -93,7 +98,7 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-      <Info message={ info }/>
+      <Info info={ info }/>
       <Searchbar query = { query } listener = { handleQueryChange }/>
       <h4>Lisää uusi yhteystieto</h4>
       <form onSubmit={ addContact }>

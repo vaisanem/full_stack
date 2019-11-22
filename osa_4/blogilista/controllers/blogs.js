@@ -68,7 +68,11 @@ blogsRouter.delete('/:id', async (request, response, next) => {
   const id = request.params.id
 
   try {
-    await Blog.findByIdAndDelete(id)
+    const decodedToken = jwt.verify(request.token, config.SECRET)
+    const blog = await Blog.findOneAndDelete({ _id: id, user: decodedToken })
+    if (!blog) {
+      response.status(401).json({ error: 'blog is not yours to delete' })
+    }
     response.status(204).send()
   } catch(error) {
     next(error)

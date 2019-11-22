@@ -19,16 +19,6 @@ const initAction = (anecdotes) => {
   }
 }
 
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
 const votesDescending = (a, b) => {
   return b.votes - a.votes
 }
@@ -53,13 +43,12 @@ const reducer = (state = [], action) => {
 
   switch(action.type) {
     case 'INIT':
-      return action.anecdotes.map(asObject)
+      return action.anecdotes
     case 'VOTE': 
       return vote(state, action)
     case 'ADD': 
       return state
-        .concat(asObject(action.anecdote))
-        .sort(votesDescending)
+        .concat(action.anecdote)
     default: 
       return state
   }

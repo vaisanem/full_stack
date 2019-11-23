@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdoteService'
+
 const votingAction = (id) => {
   return {
     type: 'VOTE',
@@ -12,10 +14,11 @@ const addingAction = (anecdote) => {
   }
 }
 
-const initAction = (anecdotes) => {
-  return {
-    type: 'INIT',
-    anecdotes: anecdotes
+const initAction = () => {
+  return async (dispatch) => {
+    dispatch({ type: 'INIT',
+      anecdotes: await anecdoteService.getAll()
+    })
   }
 }
 

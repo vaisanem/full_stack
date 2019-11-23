@@ -3,11 +3,15 @@ const startState = {
   reset: null
 }
 
-const setInfoAction = (message, reset) => {
-  return {
-    type: 'SET_INFO',
-    message: message,
-    reset: reset
+const setInfoAction = (message, time) => {
+  return async (dispatch, getState) => {
+    clearTimeout(getState().info.reset)
+    const reset = setTimeout(() => dispatch(resetInfoAction()), time * 1000)
+    dispatch({
+      type: 'SET_INFO',
+      message: message,
+      reset: reset
+    })
   }
 }
 

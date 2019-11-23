@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { votingAction } from '../reducers/anecdoteReducer'
 import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
@@ -10,11 +11,8 @@ const AnecdoteList = (props) => {
   )  
 
   const vote = (anecdote) => {
-    console.log('vote', anecdote.id)
     props.votingAction({ ...anecdote })
-    clearTimeout(props.info.reset)
-    const reset = setTimeout(() => props.resetInfoAction(), 5000)
-    props.setInfoAction(`you voted for '${anecdote.content}'`, reset)
+    props.setInfoAction(`you voted for '${anecdote.content}'`, 5)
   }
 
   return (

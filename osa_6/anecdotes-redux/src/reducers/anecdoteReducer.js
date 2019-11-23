@@ -8,15 +8,18 @@ const votingAction = (id) => {
 }
 
 const addingAction = (anecdote) => {
-  return {
-    type: 'ADD',
-    anecdote: anecdote
+  return async (dispatch) => {
+    dispatch({ 
+      type: 'ADD',
+      anecdote: await anecdoteService.add(anecdote)
+    })
   }
 }
 
 const initAction = () => {
   return async (dispatch) => {
-    dispatch({ type: 'INIT',
+    dispatch({ 
+      type: 'INIT',
       anecdotes: await anecdoteService.getAll()
     })
   }

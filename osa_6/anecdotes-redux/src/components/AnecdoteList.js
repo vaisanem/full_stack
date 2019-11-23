@@ -9,10 +9,9 @@ const AnecdoteList = (props) => {
     .includes(props.filter.toLowerCase())
   )  
 
-  const vote = (id) => {
-    console.log('vote', id)
-    props.votingAction(id)
-    const anecdote = anecdotes.find(one => one.id === id)
+  const vote = (anecdote) => {
+    console.log('vote', anecdote.id)
+    props.votingAction({ ...anecdote })
     clearTimeout(props.info.reset)
     const reset = setTimeout(() => props.resetInfoAction(), 5000)
     props.setInfoAction(`you voted for '${anecdote.content}'`, reset)
@@ -27,7 +26,7 @@ const AnecdoteList = (props) => {
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
       )}

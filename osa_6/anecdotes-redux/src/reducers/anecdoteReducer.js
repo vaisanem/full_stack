@@ -1,9 +1,17 @@
 import anecdoteService from '../services/anecdoteService'
 
-const votingAction = (id) => {
-  return {
-    type: 'VOTE',
-    id: id
+const votingAction = (anecdote) => {
+  return (dispatch, getState) => {
+    anecdote.votes++
+    anecdoteService.vote(anecdote)
+    dispatch({
+      type: 'VOTE',
+      anecdotes: getState()
+        .anecdotes
+        .filter(one => one.id !== anecdote.id)
+        .concat(anecdote)
+        .sort(votesDescending)
+    })
   }
 }
 
@@ -18,29 +26,16 @@ const addingAction = (anecdote) => {
 
 const initAction = () => {
   return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll()
     dispatch({ 
       type: 'INIT',
-      anecdotes: await anecdoteService.getAll()
+      anecdotes: anecdotes.sort(votesDescending)
     })
   }
 }
 
 const votesDescending = (a, b) => {
   return b.votes - a.votes
-}
-
-const vote = (state, action) => {
-  const anecdote = state.find(one => one.id === action.id)
-
-  switch(anecdote) {
-    case undefined:
-      return state
-    default:
-      const anecdotes = [ ...state ]
-      const i = anecdotes.indexOf(anecdote)
-      anecdotes[i].votes++
-      return anecdotes.sort(votesDescending)
-  }
 }
 
 const reducer = (state = [], action) => {
@@ -51,7 +46,7 @@ const reducer = (state = [], action) => {
     case 'INIT':
       return action.anecdotes
     case 'VOTE': 
-      return vote(state, action)
+      return action.anecdotes
     case 'ADD': 
       return state
         .concat(action.anecdote)

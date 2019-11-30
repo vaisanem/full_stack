@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
+  Route, Link
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -16,6 +16,12 @@ const Menu = () => {
     </div>
   )
 }
+
+const Notification = ({ notification }) => (
+  notification
+    ? <div><p>{notification}</p></div>
+    : <></>
+)
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
@@ -34,7 +40,10 @@ const Anecdote = ({ anecdote }) => (
   <div>
     <h2>{anecdote.content} by {anecdote.author}</h2>
     <p>has {anecdote.votes} votes</p>
-    <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+    {anecdote.info
+      ? <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+      : <></>
+    }
   </div>
 )
 
@@ -68,12 +77,15 @@ const CreateNew = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.addNew({
-      content,
-      author,
-      info,
-      votes: 0
-    })
+    props.addNew(
+      {
+        content,
+        author,
+        info,
+        votes: 0
+      },
+      props.history
+    )
   }
 
   return (
@@ -119,9 +131,15 @@ const App = () => {
 
   const [notification, setNotification] = useState('')
 
-  const addNew = (anecdote) => {
+  const addNew = (anecdote, history) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`new anecdote ${anecdote.content} created`)
+    setTimeout(() => {
+      setNotification('')
+      history.replace(history.location)
+    }, 10000)
+    history.replace('/')
   }
 
   const anecdoteById = (id) =>
@@ -139,7 +157,7 @@ const App = () => {
   }
 
   const renderAnecdote = (location) => {
-    const id = location.pathname.replace("/anecdotes/", "")
+    const id = location.pathname.replace('/anecdotes/', '')
     return (
       <Anecdote anecdote={anecdoteById(id)}/>
     )
@@ -150,9 +168,10 @@ const App = () => {
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
+        <Notification notification={notification}/> 
         <Route exact path='/' render={() => <AnecdoteList anecdotes={anecdotes}/>}></Route>
         <Route path='/anecdotes/:id' render={({ location }) => renderAnecdote(location)}></Route>
-        <Route path='/new' render={() => <CreateNew addNew={addNew} />}></Route>
+        <Route path='/new' render={({ history }) => <CreateNew addNew={addNew} history={history}/>}></Route>
         <Route path='/about' render={() => <About/>}></Route>
         <Footer />
       </div>

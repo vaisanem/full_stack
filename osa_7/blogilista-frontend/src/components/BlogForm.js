@@ -1,8 +1,9 @@
 import React from 'react'
 import blogService from '../services/blogs'
 import useField from '../hooks/index'
+import { add as addBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ blogs, setBlogs, showInfo }) => {
+const BlogForm = ({ store, showInfo }) => {
   const title = useField('text')
   const author = useField('text')
   const url = useField('text')
@@ -19,7 +20,7 @@ const BlogForm = ({ blogs, setBlogs, showInfo }) => {
 
     try {
       const blog = await blogService.create(attributes)
-      setBlogs(blogs.concat(blog))
+      store.dispatch(addBlog(blog))
       title.reset()
       author.reset()
       url.reset()

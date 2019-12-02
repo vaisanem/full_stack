@@ -5,17 +5,16 @@ import Login from './components/Login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
-import { setInfo, resetInfo } from './reducers/infoReducer'
+import { set as setInfo, reset as resetInfo } from './reducers/infoReducer'
+import { init as initBlogs, vote as voteBlog, remove as removeBlog } from './reducers/blogReducer'
 
 const App = ({ store }) => {
-  const [ blogs, setBlogs ] = useState([])
-  // const [ info, setInfo ] = useState(null)
   const [ user, setUser ] = useState(null)
 
   const showInfo = (info) => {
     store.dispatch(setInfo(info))
     setTimeout(() => {
-      store.dispatch(setInfo(null))
+      store.dispatch(resetInfo())
     }, 5000)
   }
 
@@ -24,11 +23,11 @@ const App = ({ store }) => {
       border: '3px solid #888888'
     }
 
-    if (!store.getState()) return <></>
+    if (!store.getState().info) return <></>
 
     return (
       <div style={style}>
-        <p>{store.getState()}</p>
+        <p>{store.getState().info}</p>
       </div>
     )
   }
@@ -59,12 +58,7 @@ const App = ({ store }) => {
     }
     try {
       await blogService.update(attributes)
-      let updated = [].concat(blogs)
-      updated = updated.map(one => {
-        if (one.id === blog.id) one.likes++
-        return one
-      })
-      setBlogs(updated)
+      store.dispatch(voteBlog(blog.id))
     } catch(error) {
       showInfo(error.message)
     }
@@ -77,9 +71,7 @@ const App = ({ store }) => {
     if (!confirm) return
     try {
       await blogService.remove(blog.id)
-      let updated = [].concat(blogs)
-      updated = updated.filter(one => one.id !== blog.id)
-      setBlogs(updated)
+      store.dispatch(removeBlog(blog.id))
     } catch(error) {
       showInfo(error.message)
     }
@@ -87,7 +79,7 @@ const App = ({ store }) => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      store.dispatch(initBlogs(blogs))
     )
     setUser(JSON.parse(window.localStorage.getItem('loggedUser')))
   }, [])
@@ -111,10 +103,10 @@ const App = ({ store }) => {
       <p>{user.username} kirjautuneena</p>
       {logout()}
       <Togglable init={false} label={'lisää blogi'}>
-        <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showInfo={showInfo} />
+        <BlogForm user={user} store={store} showInfo={showInfo} />
       </Togglable>
       <h2>lista blogeista</h2>
-      {[].concat(blogs).sort(compare).map(blog =>
+      {[].concat(store.getState().blogs).sort(compare).map(blog =>
         <Blog key={blog.id} blog={blog} user={user} like={like} remove={remove} />
       )}
     </div>

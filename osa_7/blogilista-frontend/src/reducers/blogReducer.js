@@ -1,48 +1,47 @@
-const init = (blogs) => {
+const initBlogs = (blogs) => {
     return {
-        type: "INIT",
+        type: "INIT_BLOGS",
         blogs: blogs
     }
 }
 
-const add = (blog) => {
+const addBlog = (blog) => {
     return {
-        type: "ADD",
+        type: "ADD_BLOG",
         blog: blog
     }
 }
 
-const vote = (id) => {
+const voteBlog = (id) => {
     return {
-        type: "VOTE",
+        type: "VOTE_BLOG",
         id: id
     }
 }
 
-const remove = (id) => {
+const removeBlog = (id) => {
     return {
-        type: "REMOVE",
+        type: "REMOVE_BLOG",
         id: id
     }
 }
 
 const reducer = (state = [], action) => {
-    console.log(action.type, state)
     switch(action.type) {
-        case "INIT":
+        case "INIT_BLOGS":
             return action.blogs
-        case "ADD":
+        case "ADD_BLOG":
             return state.concat(action.blog)
-        case "VOTE":
+        case "VOTE_BLOG":
             return state.map(one => {
                 if (one.id === action.id) one.likes++
                 return one
             })
-        case "REMOVE":
+        case "REMOVE_BLOG":
             return state.filter(one => one.id !== action.id)
         default: return state
     }
 }
 
 export default reducer
-export { init, add, vote, remove }
+export { initBlogs, addBlog, voteBlog, removeBlog }

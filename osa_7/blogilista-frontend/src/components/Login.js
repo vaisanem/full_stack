@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import loginService from '../services/login'
 import PropTypes from 'prop-types'
 
-const Login = ({ setUser, showInfo }) => {
+import loginService from '../services/login'
+import { setUser} from '../reducers/userReducer'
+
+const Login = ({ store, showInfo }) => {
 
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
@@ -16,7 +18,7 @@ const Login = ({ setUser, showInfo }) => {
     try {
       const user = await loginService.login(account)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUser(user)
+      store.dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch(error) {
@@ -55,7 +57,7 @@ const Login = ({ setUser, showInfo }) => {
 }
 
 Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
+  store: PropTypes.object.isRequired,
   showInfo: PropTypes.func.isRequired
 }
 

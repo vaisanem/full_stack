@@ -1,7 +1,7 @@
 import React from 'react'
 import blogService from '../services/blogs'
 import useField from '../hooks/index'
-import { add as addBlog } from '../reducers/blogReducer'
+import { addBlog } from '../reducers/blogReducer'
 
 const BlogForm = ({ store, showInfo }) => {
   const title = useField('text')
@@ -15,7 +15,7 @@ const BlogForm = ({ store, showInfo }) => {
       title: title.value,
       author: author.value,
       url: url.value,
-      likes: likes.value
+      likes: likes.value ? likes.value : 0
     }
 
     try {

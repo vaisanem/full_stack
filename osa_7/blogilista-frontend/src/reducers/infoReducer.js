@@ -1,21 +1,21 @@
-const set = (info) => {
+const setInfo = (info) => {
     return {
-        type: "SET",
+        type: "SET_INFO",
         info: info
     }
 }
 
-const reset = () => {
+const resetInfo = () => {
     return {
-        type: "RESET"
+        type: "RESET_INFO"
     }
 }
 
 const reducer = (state = "", action) => {
     switch(action.type) {
-        case "SET":
+        case "SET_INFO":
             return action.info
-        case "RESET":
+        case "RESET_INFO":
             return ""
         default:
             return state
@@ -23,4 +23,4 @@ const reducer = (state = "", action) => {
 }
 
 export default reducer
-export { set, reset }
+export { setInfo, resetInfo }

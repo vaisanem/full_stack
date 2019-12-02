@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
-import { set as setInfo, reset as resetInfo } from './reducers/infoReducer'
-import { init as initBlogs, vote as voteBlog, remove as removeBlog } from './reducers/blogReducer'
+import { setInfo, resetInfo } from './reducers/infoReducer'
+import { voteBlog, removeBlog } from './reducers/blogReducer'
+import { resetUser} from './reducers/userReducer'
 
 const App = ({ store }) => {
-  const [ user, setUser ] = useState(null)
 
   const showInfo = (info) => {
     store.dispatch(setInfo(info))
@@ -39,7 +39,7 @@ const App = ({ store }) => {
   const logout = () => {
     const listener = () => {
       window.localStorage.removeItem('loggedUser')
-      setUser(null)
+      store.dispatch(resetUser())
       blogService.setToken(null)
     }
 
@@ -77,19 +77,14 @@ const App = ({ store }) => {
     }
   }
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      store.dispatch(initBlogs(blogs))
-    )
-    setUser(JSON.parse(window.localStorage.getItem('loggedUser')))
-  }, [])
+  const user = store.getState().user
 
   if (!user) {
     return (
       <div>
         <h2>blogilista</h2>
         {infoSection()}
-        <Login setUser={setUser} showInfo={showInfo} />
+        <Login store={store} showInfo={showInfo} />
       </div>
     )
   }

@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import loginService from '../services/login'
-import { setUser} from '../reducers/userReducer'
+import blogService from '../services/blogs'
+import { setUser, resetUser } from '../reducers/userReducer'
 
 const Login = ({ store, showInfo }) => {
 
@@ -19,11 +20,27 @@ const Login = ({ store, showInfo }) => {
       const user = await loginService.login(account)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       store.dispatch(setUser(user))
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
     } catch(error) {
       showInfo('käyttäjätunnus tai salasana virheellinen')
     }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedUser')
+    store.dispatch(resetUser())
+    blogService.setToken(null)
+  }
+
+  if (store.getState().user) {
+    return (
+      <div>
+        <p>{store.getState().user.username} kirjautuneena</p>
+        <button type='submit' onClick={handleLogout}>kirjaudu ulos</button>
+      </div>
+    )
   }
 
   return (

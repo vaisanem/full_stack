@@ -1,13 +1,16 @@
 import React from 'react'
+import { BrowserRouter as Router,
+  Link, Redirect, Route } from 'react-router-dom'
+import { groupBy } from 'lodash'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
+import InfoSection from './components/InfoSection'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import { setInfo, resetInfo } from './reducers/infoReducer'
 import { voteBlog, removeBlog } from './reducers/blogReducer'
-import { resetUser} from './reducers/userReducer'
 
 const App = ({ store }) => {
 
@@ -18,34 +21,8 @@ const App = ({ store }) => {
     }, 5000)
   }
 
-  const infoSection = () => {
-    const style = {
-      border: '3px solid #888888'
-    }
-
-    if (!store.getState().info) return <></>
-
-    return (
-      <div style={style}>
-        <p>{store.getState().info}</p>
-      </div>
-    )
-  }
-
   const compare = (a, b) => {
     return b.likes - a.likes
-  }
-
-  const logout = () => {
-    const listener = () => {
-      window.localStorage.removeItem('loggedUser')
-      store.dispatch(resetUser())
-      blogService.setToken(null)
-    }
-
-    return (
-      <button type='submit' onClick={listener}>kirjaudu ulos</button>
-    )
   }
 
   const like = async (blog) => {
@@ -77,34 +54,51 @@ const App = ({ store }) => {
     }
   }
 
-  const user = store.getState().user
-
-  if (!user) {
-    return (
-      <div>
-        <h2>blogilista</h2>
-        {infoSection()}
-        <Login store={store} showInfo={showInfo} />
-      </div>
-    )
-  }
-
-  blogService.setToken(user.token)
+  const blogsGroupedByUser = groupBy(store.getState().blogs, 'user.name')
 
   return (
-    <div>
-      <h2>blogilista</h2>
-      {infoSection()}
-      <p>{user.username} kirjautuneena</p>
-      {logout()}
-      <Togglable init={false} label={'lisää blogi'}>
-        <BlogForm user={user} store={store} showInfo={showInfo} />
-      </Togglable>
-      <h2>lista blogeista</h2>
-      {[].concat(store.getState().blogs).sort(compare).map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} like={like} remove={remove} />
-      )}
-    </div>
+    <Router>
+      <div>
+        <h2>blogilista</h2>
+        <InfoSection store={store} />
+        <Login store={store} showInfo={showInfo} />
+        <Route exact path='/' render={() => (
+          <div>
+            <Togglable init={false} label={'lisää blogi'}>
+              <BlogForm store={store} showInfo={showInfo} />
+            </Togglable>
+            <div>
+              <h2>lista blogeista</h2>
+              {[].concat(store.getState().blogs).sort(compare).map(blog =>
+                <Blog key={blog.id} blog={blog} user={store.getState().user}
+                  like={like} remove={remove} />
+              )}
+            </div>
+          </div>
+        )} />
+        <Route path='/users' render={() => (
+          <div>
+            <h2>käyttäjät</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>blogeja</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(blogsGroupedByUser).map(one =>
+                  <tr key={one}>
+                    <td>{one}</td>
+                    <td>{blogsGroupedByUser[one].length}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )} />
+      </div>
+    </Router>
   )
 }
 

@@ -71,11 +71,14 @@ const App = ({ store }) => {
         <Login store={store} showInfo={showInfo} />
         <Route exact path='/' render={() => (
           <div>
-            <Togglable init={false} label={'lisää blogi'}>
-              <BlogForm store={store} showInfo={showInfo} />
-            </Togglable>
+            { store.getState().user
+              ? <Togglable init={false} label={'lisää blogi'}>
+                  <BlogForm store={store} showInfo={showInfo} />
+                </Togglable> 
+              : <></>
+            }
             <div>
-              <h2>lista blogeista</h2>
+              <h3>lista blogeista</h3>
               {[].concat(store.getState().blogs).sort(compare).map(blog =>
                 <Blog key={blog.id} blog={blog} user={store.getState().user}
                   like={like} remove={remove} />
@@ -115,6 +118,14 @@ const App = ({ store }) => {
                 {blogsGroupedByUser[name].map(one => <li key={one.id}>{one.title}</li>)}
               </ul>
             </div>
+          )
+        }} />
+        <Route path='/blogs/:id' render={({ match }) => {
+          if (isEmpty(store.getState().blogs)) return <></>
+          const blog = store.getState().blogs.find(one => one.id === match.params.id)
+          return (
+            <Blog key={blog.id} blog={blog} user={store.getState().user}
+              like={like} remove={remove} />
           )
         }} />
       </div>

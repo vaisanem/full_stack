@@ -13,11 +13,11 @@ const Blog = ({ blog, user, like, remove }) => {
     backgroundColor: 'lightgrey'
   }
 
-  const usersBlog = { display: user.username === blog.user.username ? '' : 'none' }
+  const usersBlog = { display: !user ? 'none' : user.username === blog.user.username ? '' : 'none' }
 
   return (
     <div onClick={() => setExpand(!expand)} style={style}>
-      {blog.title} {blog.author}
+      <h4><a href={`/blogs/${blog.id}`}>{blog.title} {blog.author}</a></h4>
       <div style={{ display: expand ? '' : 'none' }}>
         <p>{blog.url}</p>
         <div>

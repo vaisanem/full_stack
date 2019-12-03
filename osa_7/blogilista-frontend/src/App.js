@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router,
   Link, Redirect, Route } from 'react-router-dom'
-import { groupBy } from 'lodash'
+import { groupBy, isEmpty } from 'lodash'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
@@ -56,6 +56,13 @@ const App = ({ store }) => {
 
   const blogsGroupedByUser = groupBy(store.getState().blogs, 'user.name')
 
+  const getUserNameByUsername = (username) => {
+    return Object.values(blogsGroupedByUser)
+      .map(one => one[0])
+      .find(one => one.user.username === username)
+      .user.name
+  }
+
   return (
     <Router>
       <div>
@@ -76,7 +83,7 @@ const App = ({ store }) => {
             </div>
           </div>
         )} />
-        <Route path='/users' render={() => (
+        <Route exact path='/users' render={() => (
           <div>
             <h2>käyttäjät</h2>
             <table>
@@ -89,7 +96,7 @@ const App = ({ store }) => {
               <tbody>
                 {Object.keys(blogsGroupedByUser).map(one =>
                   <tr key={one}>
-                    <td>{one}</td>
+                    <td><a href={`/users/${blogsGroupedByUser[one][0].user.username}`}>{one}</a></td>
                     <td>{blogsGroupedByUser[one].length}</td>
                   </tr>
                 )}
@@ -97,6 +104,19 @@ const App = ({ store }) => {
             </table>
           </div>
         )} />
+        <Route path='/users/:username' render={({ match }) => {
+          if (isEmpty(blogsGroupedByUser)) return <></>
+          const name = getUserNameByUsername(match.params.username)
+          return (
+            <div> 
+              <h2>{name}</h2>
+              <h3>blogit</h3>
+              <ul>
+                {blogsGroupedByUser[name].map(one => <li key={one.id}>{one.title}</li>)}
+              </ul>
+            </div>
+          )
+        }} />
       </div>
     </Router>
   )

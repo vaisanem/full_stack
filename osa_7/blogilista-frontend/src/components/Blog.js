@@ -11,7 +11,7 @@ const Blog = ({ blog, user, like, remove, init=false }) => {
     padding: '2px',
     margin: '5px',
     borderRadius: '5px',
-    backgroundColor: 'lightgrey'
+    backgroundColor: 'beige'
   }
 
   const usersBlog = { display: !user ? 'none' : user.username === blog.user.username ? '' : 'none' }

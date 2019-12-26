@@ -6,7 +6,7 @@ import Logout from './Logout'
 const Nav = ({ store }) => {
 
     return (
-        <div style={{background: 'silver'}}>
+        <div style={{background: 'silver', padding: '5px'}}>
             <Link to='/'>
                 blogit
             </Link>

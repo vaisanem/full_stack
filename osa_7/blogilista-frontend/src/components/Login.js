@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Form } from 'semantic-ui-react'
 
 import loginService from '../services/login'
 import blogService from '../services/blogs'
@@ -30,30 +31,30 @@ const Login = ({ store, showInfo }) => {
 
   return (
     <div>
-      <h2>Kirjaudu</h2>
-
-      <form onSubmit={handleLogin}>
-        <div>
-          käyttäjätunnus
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          salasana
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">kirjaudu</button>
-      </form>
-
+      <h3>Kirjaudu</h3>
+      <Form>
+        <form style={{width: '25em'}} onSubmit={handleLogin}>
+          <div>
+            käyttäjätunnus
+            <input
+              type="text"
+              value={username}
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
+            />
+          </div>
+          <div>
+            salasana
+            <input
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
+            />
+          </div>
+          <button type="submit" style={{marginTop: '5px'}}>kirjaudu</button>
+        </form>
+      </Form>
     </div>
   )
 }

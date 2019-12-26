@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Table } from 'semantic-ui-react'
 
 const Blog = ({ blog, user, like, remove, init=false }) => {
 
@@ -27,9 +28,11 @@ const Blog = ({ blog, user, like, remove, init=false }) => {
         <p>added by {blog.user.username}</p>
         <button style={usersBlog} onClick={() => remove(blog)}>poista</button>
         <h4>kommentit</h4>
-        <ul>
-          {blog.comments.map(one => <li key={one}>{one}</li>)}
-        </ul>
+        <Table>
+          <tbody>
+            {blog.comments.map(one => <tr key={one}><td>{one}</td></tr>)}
+          </tbody>
+        </Table>
       </div>
     </div>
   )

@@ -26,6 +26,10 @@ const Blog = ({ blog, user, like, remove, init=false }) => {
         </div>
         <p>added by {blog.user.username}</p>
         <button style={usersBlog} onClick={() => remove(blog)}>poista</button>
+        <h4>kommentit</h4>
+        <ul>
+          {blog.comments.map(one => <li key={one}>{one}</li>)}
+        </ul>
       </div>
     </div>
   )

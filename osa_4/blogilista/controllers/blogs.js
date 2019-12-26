@@ -30,16 +30,10 @@ blogsRouter.post('/', async (request, response, next) => {
     const savedBlog = await blog.save()
     user.blogs.push(savedBlog.id)
     await user.save()
-    const returnBlog = {
-      title: savedBlog.title,
-      author: savedBlog.author,
-      url: savedBlog.url,
-      likes: savedBlog.likes,
-      id: savedBlog.id,
-      user: {
-        username: user.username,
-        name: user.name
-      }
+    const returnBlog = savedBlog.toObject()
+    returnBlog.user = {
+      username: user.username,
+      name: user.name
     }
     response.status(201).json(returnBlog)
   } catch(error) {
@@ -59,6 +53,17 @@ blogsRouter.put('/:id', async (request, response, next) => {
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true })
     response.status(200).json(updatedBlog)
+  } catch(error) {
+    next(error)
+  }
+})
+
+blogsRouter.put('/:id/comments', async (request, response, next) => {
+  try {
+    const blog = await Blog.findById(request.params.id)
+    blog.comments.push(request.body.comment)
+    blog.save()
+    response.status(200).json(blog)
   } catch(error) {
     next(error)
   }

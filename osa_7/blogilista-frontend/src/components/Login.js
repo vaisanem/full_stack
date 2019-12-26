@@ -33,7 +33,7 @@ const Login = ({ store, showInfo }) => {
     <div>
       <h3>Kirjaudu</h3>
       <Form>
-        <form style={{width: '25em'}} onSubmit={handleLogin}>
+        <form style={{ width: '25em' }} onSubmit={handleLogin}>
           <div>
             käyttäjätunnus
             <input
@@ -52,7 +52,7 @@ const Login = ({ store, showInfo }) => {
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit" style={{marginTop: '5px'}}>kirjaudu</button>
+          <button type="submit" style={{ marginTop: '5px' }}>kirjaudu</button>
         </form>
       </Form>
     </div>

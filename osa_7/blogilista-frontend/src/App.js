@@ -132,7 +132,7 @@ const App = ({ store }) => {
               if (isEmpty(blogsGroupedByUser)) return <></>
               const name = getUserNameByUsername(match.params.username)
               return (
-                <div> 
+                <div>
                   <h2>{name}</h2>
                   <h3>blogit</h3>
                   <ul>

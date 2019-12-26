@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router,
-  Link, Redirect, Route } from 'react-router-dom'
+  Redirect, Route } from 'react-router-dom'
 import { groupBy, isEmpty } from 'lodash'
 
 import Blog from './components/Blog'
@@ -8,6 +8,7 @@ import Login from './components/Login'
 import InfoSection from './components/InfoSection'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import Nav from './components/Nav'
 import blogService from './services/blogs'
 import { setInfo, resetInfo } from './reducers/infoReducer'
 import { voteBlog, removeBlog } from './reducers/blogReducer'
@@ -66,16 +67,24 @@ const App = ({ store }) => {
   return (
     <Router>
       <div>
+        <Nav store={store} />
         <h2>blogilista</h2>
         <InfoSection store={store} />
-        <Login store={store} showInfo={showInfo} />
+        <Route path='/login' render={() => (
+          <div>
+            { store.getState().user ?
+              <Redirect to='/' /> :
+              <Login store={store} showInfo={showInfo} />
+            }
+          </div>
+        )} />
         <Route exact path='/' render={() => (
           <div>
-            { store.getState().user
-              ? <Togglable init={false} label={'lisää blogi'}>
-                  <BlogForm store={store} showInfo={showInfo} />
-                </Togglable> 
-              : <></>
+            { store.getState().user ?
+              <Togglable init={false} label={'lisää blogi'}>
+                <BlogForm store={store} showInfo={showInfo} />
+              </Togglable> :
+              <></>
             }
             <div>
               <h3>lista blogeista</h3>
@@ -125,9 +134,12 @@ const App = ({ store }) => {
           const blog = store.getState().blogs.find(one => one.id === match.params.id)
           return (
             <Blog key={blog.id} blog={blog} user={store.getState().user}
-              like={like} remove={remove} />
+              like={like} remove={remove} init={true} />
           )
         }} />
+        <Route exact path='/blogs'>
+          <Redirect to='/' />
+        </Route>
       </div>
     </Router>
   )

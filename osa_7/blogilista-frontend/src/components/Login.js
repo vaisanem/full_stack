@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import loginService from '../services/login'
 import blogService from '../services/blogs'
-import { setUser, resetUser } from '../reducers/userReducer'
+import { setUser } from '../reducers/userReducer'
 
 const Login = ({ store, showInfo }) => {
 
@@ -26,21 +26,6 @@ const Login = ({ store, showInfo }) => {
     } catch(error) {
       showInfo('käyttäjätunnus tai salasana virheellinen')
     }
-  }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    store.dispatch(resetUser())
-    blogService.setToken(null)
-  }
-
-  if (store.getState().user) {
-    return (
-      <div>
-        <p>{store.getState().user.username} kirjautuneena</p>
-        <button type='submit' onClick={handleLogout}>kirjaudu ulos</button>
-      </div>
-    )
   }
 
   return (

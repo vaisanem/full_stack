@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, user, like, remove }) => {
+const Blog = ({ blog, user, like, remove, init=false }) => {
 
-  const [ expand, setExpand ] = useState(false)
+  const [ expand, setExpand ] = useState(init)
 
   const style = {
     cursor: 'pointer',

@@ -25,7 +25,7 @@ const update = async (attributes) => {
 }
 
 const comment = async (id, comment) => {
-  const response = await axios.post(baseUrl.concat('/', id, '/comments'), comment)
+  const response = await axios.post(baseUrl.concat('/', id, '/comments'), {comment: comment})
   return response.data
 }
 

@@ -2,6 +2,8 @@ import React from 'react'
 import { BrowserRouter as Router,
   Redirect, Route } from 'react-router-dom'
 import { groupBy, isEmpty } from 'lodash'
+import { Container } from 'semantic-ui-react'
+import styled from 'styled-components'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
@@ -71,84 +73,95 @@ const App = ({ store }) => {
       .user.name
   }
 
+  const Background = styled.div`
+    background-color: lavender;
+    height: 100%;
+    width: 100%;
+  `
+
   return (
-    <Router>
-      <div>
-        <Nav store={store} />
-        <h2>blogilista</h2>
-        <InfoSection store={store} />
-        <Route path='/login' render={() => (
+    <Background>
+      <Container>
+        <Router>
           <div>
-            { store.getState().user ?
-              <Redirect to='/' /> :
-              <Login store={store} showInfo={showInfo} />
-            }
-          </div>
-        )} />
-        <Route exact path='/' render={() => (
-          <div>
-            { store.getState().user ?
-              <Togglable init={false} label={'lisää blogi'}>
-                <BlogForm store={store} showInfo={showInfo} />
-              </Togglable> :
-              <></>
-            }
-            <div>
-              <h3>lista blogeista</h3>
-              {[].concat(store.getState().blogs).sort(compare).map(blog =>
+            <Nav store={store} />
+            <h2>blogilista</h2>
+            <InfoSection store={store} />
+            <Route path='/login' render={() => (
+              <div>
+                { store.getState().user ?
+                  <Redirect to='/' /> :
+                  <Login store={store} showInfo={showInfo} />
+                }
+              </div>
+            )} />
+            <Route exact path='/' render={() => (
+              <div>
+                { store.getState().user ?
+                  <Togglable init={false} label={'lisää blogi'}>
+                    <BlogForm store={store} showInfo={showInfo} />
+                  </Togglable> :
+                  <></>
+                }
+                <br/>
+                <div>
+                  <h3>lista blogeista</h3>
+                  {[].concat(store.getState().blogs).sort(compare).map(blog =>
+                    <Blog key={blog.id} blog={blog} user={store.getState().user}
+                      like={like} comment={comment} remove={remove} />
+                  )}
+                </div>
+              </div>
+            )} />
+            <Route exact path='/users' render={() => (
+              <div>
+                <h2>käyttäjät</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>blogeja</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(blogsGroupedByUser).map(one =>
+                      <tr key={one}>
+                        <td><a href={`/users/${blogsGroupedByUser[one][0].user.username}`}>{one}</a></td>
+                        <td>{blogsGroupedByUser[one].length}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )} />
+            <Route path='/users/:username' render={({ match }) => {
+              if (isEmpty(blogsGroupedByUser)) return <></>
+              const name = getUserNameByUsername(match.params.username)
+              return (
+                <div>
+                  <h2>{name}</h2>
+                  <h3>blogit</h3>
+                  <ul>
+                    {blogsGroupedByUser[name].map(one => <li key={one.id}>{one.title}</li>)}
+                  </ul>
+                </div>
+              )
+            }} />
+            <Route path='/blogs/:id' render={({ match }) => {
+              if (isEmpty(store.getState().blogs)) return <></>
+              const blog = store.getState().blogs.find(one => one.id === match.params.id)
+              return (
                 <Blog key={blog.id} blog={blog} user={store.getState().user}
-                  like={like} remove={remove} />
-              )}
-            </div>
+                  like={like} comment={comment} remove={remove} init={true} />
+              )
+            }} />
+            <Route exact path='/blogs'>
+              <Redirect to='/' />
+            </Route>
           </div>
-        )} />
-        <Route exact path='/users' render={() => (
-          <div>
-            <h2>käyttäjät</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>blogeja</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.keys(blogsGroupedByUser).map(one =>
-                  <tr key={one}>
-                    <td><a href={`/users/${blogsGroupedByUser[one][0].user.username}`}>{one}</a></td>
-                    <td>{blogsGroupedByUser[one].length}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )} />
-        <Route path='/users/:username' render={({ match }) => {
-          if (isEmpty(blogsGroupedByUser)) return <></>
-          const name = getUserNameByUsername(match.params.username)
-          return (
-            <div> 
-              <h2>{name}</h2>
-              <h3>blogit</h3>
-              <ul>
-                {blogsGroupedByUser[name].map(one => <li key={one.id}>{one.title}</li>)}
-              </ul>
-            </div>
-          )
-        }} />
-        <Route path='/blogs/:id' render={({ match }) => {
-          if (isEmpty(store.getState().blogs)) return <></>
-          const blog = store.getState().blogs.find(one => one.id === match.params.id)
-          return (
-            <Blog key={blog.id} blog={blog} user={store.getState().user}
-              like={like} comment={comment} remove={remove} init={true} />
-          )
-        }} />
-        <Route exact path='/blogs'>
-          <Redirect to='/' />
-        </Route>
-      </div>
-    </Router>
+        </Router>
+      </Container>
+    </Background>
   )
 }
 

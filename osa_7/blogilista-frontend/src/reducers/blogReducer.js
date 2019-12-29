@@ -1,59 +1,59 @@
 const initBlogs = (blogs) => {
-    return {
-        type: "INIT_BLOGS",
-        blogs: blogs
-    }
+  return {
+    type: 'INIT_BLOGS',
+    blogs: blogs
+  }
 }
 
 const addBlog = (blog) => {
-    return {
-        type: "ADD_BLOG",
-        blog: blog
-    }
+  return {
+    type: 'ADD_BLOG',
+    blog: blog
+  }
 }
 
 const voteBlog = (id) => {
-    return {
-        type: "VOTE_BLOG",
-        id: id
-    }
+  return {
+    type: 'VOTE_BLOG',
+    id: id
+  }
 }
 
 const commentBlog = (id, content) => {
-    return {
-        type: "COMMENT_BLOG",
-        id: id,
-        comment: content
-    }
+  return {
+    type: 'COMMENT_BLOG',
+    id: id,
+    comment: content
+  }
 }
 
 const removeBlog = (id) => {
-    return {
-        type: "REMOVE_BLOG",
-        id: id
-    }
+  return {
+    type: 'REMOVE_BLOG',
+    id: id
+  }
 }
 
 const reducer = (state = [], action) => {
-    switch(action.type) {
-        case "INIT_BLOGS":
-            return action.blogs
-        case "ADD_BLOG":
-            return state.concat(action.blog)
-        case "VOTE_BLOG":
-            return state.map(one => {
-                if (one.id === action.id) one.likes++
-                return one
-            })
-        case "COMMENT_BLOG":
-            return state.map(one => {
-                if (one.id === action.id) one.comments.push(action.comment)
-                return one
-            })
-        case "REMOVE_BLOG":
-            return state.filter(one => one.id !== action.id)
-        default: return state
-    }
+  switch(action.type) {
+  case 'INIT_BLOGS':
+    return action.blogs
+  case 'ADD_BLOG':
+    return state.concat(action.blog)
+  case 'VOTE_BLOG':
+    return state.map(one => {
+      if (one.id === action.id) one.likes++
+      return one
+    })
+  case 'COMMENT_BLOG':
+    return state.map(one => {
+      if (one.id === action.id) one.comments.push(action.comment)
+      return one
+    })
+  case 'REMOVE_BLOG':
+    return state.filter(one => one.id !== action.id)
+  default: return state
+  }
 }
 
 export default reducer

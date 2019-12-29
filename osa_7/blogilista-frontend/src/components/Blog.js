@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { Table } from 'semantic-ui-react'
+import useField from '../hooks/index'
 
 const Blog = ({ blog, user, like, comment, remove, init=false }) => {
 
   const [ expand, setExpand ] = useState(init)
-  const [ content, setContent ] = useState('')
+  const newComment = useField('text')
 
   const style = {
     cursor: 'pointer',
@@ -11,7 +13,7 @@ const Blog = ({ blog, user, like, comment, remove, init=false }) => {
     padding: '2px',
     margin: '5px',
     borderRadius: '5px',
-    backgroundColor: 'lightgrey'
+    backgroundColor: 'beige'
   }
 
   const usersBlog = { display: !user ? 'none' : user.username === blog.user.username ? '' : 'none' }
@@ -28,13 +30,17 @@ const Blog = ({ blog, user, like, comment, remove, init=false }) => {
           </div>
           <p>added by {blog.user.username}</p>
           <button style={usersBlog} onClick={() => remove(blog)}>poista</button>
-      </div>
+        </div>
         <h4>kommentit</h4>
-        <input value={content} onChange={(event) => setContent(event.target.value)}/>
-        <button onClick={() => comment(blog.id, content)}>kommentoi</button>
-        <ul>
-          {blog.comments.map(one => <li key={one}>{one}</li>)}
-        </ul>
+        <div>
+          <input {... { ...newComment, ...{ reset: null } }}/>
+          <button onClick={() => comment(blog.id, newComment.value)}>kommentoi</button>
+        </div>
+        <Table>
+          <tbody>
+            {blog.comments.map(one => <tr key={one}><td>{one}</td></tr>)}
+          </tbody>
+        </Table>
       </div>
     </div>
   )

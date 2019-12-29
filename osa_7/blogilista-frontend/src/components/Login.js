@@ -32,8 +32,7 @@ const Login = ({ store, showInfo }) => {
   return (
     <div>
       <h3>Kirjaudu</h3>
-      <Form>
-        <form style={{ width: '25em' }} onSubmit={handleLogin}>
+      <Form style={{ width: '25em' }} onSubmit={handleLogin}>
           <div>
             käyttäjätunnus
             <input
@@ -53,7 +52,6 @@ const Login = ({ store, showInfo }) => {
             />
           </div>
           <button type="submit" style={{ marginTop: '5px' }}>kirjaudu</button>
-        </form>
       </Form>
     </div>
   )

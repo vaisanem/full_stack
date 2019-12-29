@@ -13,7 +13,7 @@ import Togglable from './components/Togglable'
 import Nav from './components/Nav'
 import blogService from './services/blogs'
 import { setInfo, resetInfo } from './reducers/infoReducer'
-import { voteBlog, removeBlog } from './reducers/blogReducer'
+import { voteBlog, commentBlog, removeBlog } from './reducers/blogReducer'
 
 const App = ({ store }) => {
 
@@ -44,6 +44,13 @@ const App = ({ store }) => {
     }
   }
 
+  const comment = async (id, content) => {
+    if (content) {
+      await blogService.comment(id, content)
+      store.dispatch(commentBlog(id, content))
+    } else showInfo('kommenttisi sisältää arvojemme vastaista sisältöä')
+  }
+
   const remove = async (blog) => {
     const confirm = window.confirm(
       'Poistetaanko '.concat(blog.title, ', ',  blog.author,'?')
@@ -70,7 +77,6 @@ const App = ({ store }) => {
     background-color: lavender;
     height: 100%;
     width: 100%;
-    position: fixed
   `
 
   return (
@@ -102,7 +108,7 @@ const App = ({ store }) => {
                   <h3>lista blogeista</h3>
                   {[].concat(store.getState().blogs).sort(compare).map(blog =>
                     <Blog key={blog.id} blog={blog} user={store.getState().user}
-                      like={like} remove={remove} />
+                      like={like} comment={comment} remove={remove} />
                   )}
                 </div>
               </div>
@@ -146,7 +152,7 @@ const App = ({ store }) => {
               const blog = store.getState().blogs.find(one => one.id === match.params.id)
               return (
                 <Blog key={blog.id} blog={blog} user={store.getState().user}
-                  like={like} remove={remove} init={true} />
+                  like={like} comment={comment} remove={remove} init={true} />
               )
             }} />
             <Route exact path='/blogs'>

@@ -19,6 +19,14 @@ const voteBlog = (id) => {
   }
 }
 
+const commentBlog = (id, content) => {
+  return {
+    type: 'COMMENT_BLOG',
+    id: id,
+    comment: content
+  }
+}
+
 const removeBlog = (id) => {
   return {
     type: 'REMOVE_BLOG',
@@ -37,6 +45,11 @@ const reducer = (state = [], action) => {
       if (one.id === action.id) one.likes++
       return one
     })
+  case 'COMMENT_BLOG':
+    return state.map(one => {
+      if (one.id === action.id) one.comments.push(action.comment)
+      return one
+    })
   case 'REMOVE_BLOG':
     return state.filter(one => one.id !== action.id)
   default: return state
@@ -44,4 +57,4 @@ const reducer = (state = [], action) => {
 }
 
 export default reducer
-export { initBlogs, addBlog, voteBlog, removeBlog }
+export { initBlogs, addBlog, voteBlog, commentBlog, removeBlog }

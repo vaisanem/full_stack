@@ -58,12 +58,12 @@ blogsRouter.put('/:id', async (request, response, next) => {
   }
 })
 
-blogsRouter.put('/:id/comments', async (request, response, next) => {
+blogsRouter.post('/:id/comments', async (request, response, next) => {
   try {
     const blog = await Blog.findById(request.params.id)
     blog.comments.push(request.body.comment)
     blog.save()
-    response.status(200).json(blog)
+    response.status(200).json(blog.toObject())
   } catch(error) {
     next(error)
   }

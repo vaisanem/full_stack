@@ -3,7 +3,7 @@
     {
       "id": 1,
       "content": "If it hurts, do it more often",
-      "votes": 6
+      "votes": 7
     },
     {
       "id": 2,
@@ -32,13 +32,18 @@
     },
     {
       "content": "Elämä on laiffii",
-      "votes": 4,
+      "votes": 5,
       "id": 7
     },
     {
       "content": "Ankka meni baariin",
-      "votes": 10,
+      "votes": 11,
       "id": 8
+    },
+    {
+      "content": "Uusi vuosi, uudet kujeet",
+      "votes": 5,
+      "id": 9
     }
   ]
 }

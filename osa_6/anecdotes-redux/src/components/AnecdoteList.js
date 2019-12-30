@@ -4,12 +4,7 @@ import { connect } from 'react-redux'
 import { votingAction } from '../reducers/anecdoteReducer'
 import { setInfoAction, resetInfoAction } from '../reducers/infoReducer'
 
-const AnecdoteList = (props) => {
-  const anecdotes = props.anecdotes.filter(one => one
-    .content.toLowerCase()
-    .includes(props.filter.toLowerCase())
-  )  
-
+const AnecdoteList = (props) => {  
   const vote = (anecdote) => {
     props.votingAction({ ...anecdote })
     props.setInfoAction(`you voted for '${anecdote.content}'`, 5)
@@ -17,7 +12,7 @@ const AnecdoteList = (props) => {
 
   return (
     <div>
-      {anecdotes.map(anecdote =>
+      {props.anecdotesToShow.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -30,13 +25,15 @@ const AnecdoteList = (props) => {
       )}
     </div>
   )
-}
+}  
 
 const mapStateToProps = (state) => {
   return {
-    anecdotes: state.anecdotes,
-    filter: state.filter,
-    info: state.info
+    anecdotesToShow: state.anecdotes.filter(one => 
+      one.content
+        .toLowerCase()
+        .includes(state.filter.toLowerCase())
+    )
   }
 }
 

@@ -26,16 +26,10 @@ const AnecdoteForm = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    info: state.info
-  }
-}
-
 const mapDispatchToProps = {
   addingAction,
   setInfoAction,
   resetInfoAction
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteForm)
+export default connect(null, mapDispatchToProps)(AnecdoteForm)

@@ -102,21 +102,30 @@ const typeDefs = gql`
     hello: String!,
     bookCount: Int!,
     authorCount: Int!,
-    allBooks(author: String): [Book]!,
+    allBooks(
+      author: String,
+      genre: String
+    ): [Book]!,
     allAuthors: [Author]!
   }
 `
+
+Array.prototype.filterByAuthor = function(author) {
+  return author ? this.filter(one => one.author === author) : this
+}
+
+Array.prototype.filterByGenre = function(genre) {
+  return genre ? this.filter(one => one.genres.includes(genre)) : this
+}
 
 const resolvers = {
   Query: {
     hello: () => { return "world" },
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      return args.author ?
-        books.filter(one => one.author === args.author) :
-        books
-    },
+    allBooks: (root, args) => books
+      .filterByAuthor(args.author)
+      .filterByGenre(args.genre),
     allAuthors: () => authors
   },
   Author: {

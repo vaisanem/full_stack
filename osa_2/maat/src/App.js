@@ -13,7 +13,7 @@ function App() {
     one.toLowerCase().includes(query.toLowerCase())
   )
 
-  const listener = (event) => {
+  const inputListener = (event) => {
     setQuery(event.target.value)
     countriesToShow = countries.filter(one => 
       one.toLowerCase().includes(event.target.value.toLowerCase())
@@ -25,6 +25,12 @@ function App() {
     } else {
       setCountry(null)
     }
+  }
+
+  const buttonListener = (country) => {
+    searchCountryData(country).then(response => {
+      setCountry(response.data[0])
+    })
   }
 
   useEffect(() => {
@@ -42,13 +48,15 @@ function App() {
       <div>
         <br></br>
         <>find countries </>
-        <input onChange={listener}></input>
+        <input onChange={inputListener}></input>
       </div>
       {countriesToShow.length <= 10 ?
       country ? 
       <Country country={country} /> :
       <div>
-        {countriesToShow.map(one => <p key={one}>{one}</p>)}
+        {countriesToShow.map(one => 
+          <p key={one}>{one} <button onClick={() => buttonListener(one)}>show</button></p>
+        )}
       </div> :
       <p>Filter provided too many matches</p>}
     </div>

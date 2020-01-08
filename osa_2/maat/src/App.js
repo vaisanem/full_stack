@@ -29,6 +29,7 @@ function App() {
 
   const buttonListener = (country) => {
     searchCountryData(country).then(response => {
+      setQuery(country)
       setCountry(response.data[0])
     })
   }
@@ -48,7 +49,7 @@ function App() {
       <div>
         <br></br>
         <>find countries </>
-        <input onChange={inputListener}></input>
+        <input value={query} onChange={inputListener}></input>
       </div>
       {countriesToShow.length <= 10 ?
       country ? 

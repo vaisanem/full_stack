@@ -4,6 +4,13 @@ import parseNewPatient from '../utils/patient';
 
 const router = express.Router();
 
+router.get('/:id', (_req, res) => {
+  const id = _req.params.id;
+  const patient = service.getPatient(id);
+  if (!patient) return res.status(404).json('Could not find patient for id:' + id);
+  return res.json(patient);
+});
+
 router.get('/', (_req, res) => {
   res.json(service.getAllPatients());
 });

@@ -1,7 +1,7 @@
 export type Diagnosis = {
-  code: string;
-  name: string;
-  latin?: string;
+  code: string,
+  name: string,
+  latin?: string,
 };
 
 export enum Gender {
@@ -10,15 +10,24 @@ export enum Gender {
   Other = 'other'
 }
 
-export type Patient = {
+export interface Entry {
   id: string;
-  name: string;
-  dateOfBirth: string;
-  ssn: string;
-  gender: Gender;
-  occupation: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<Diagnosis['code']>;
+}
+
+export type Patient = {
+  id: string,
+  name: string,
+  dateOfBirth: string,
+  ssn: string,
+  gender: Gender,
+  occupation: string,
+  entries: Entry[]
 };
 
-export type PublicPatientData = Omit<Patient, 'ssn'>;
+export type PublicPatientData = Omit<Patient, 'ssn' | 'entries'>;
 
 export type NewPatient = Omit<Patient, 'id'>;

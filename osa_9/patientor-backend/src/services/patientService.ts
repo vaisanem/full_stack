@@ -22,11 +22,16 @@ const getAllPatients = (): PublicPatientData[] => {
   return patients.map(({ ssn, ...rest }) => rest);
 };
 
+const getPatient = (id: string): Patient | undefined => {
+  return patients.find(one => one.id === id);
+};
+
 const addPatient = (patientData: NewPatient): Patient => {
   const newPatient = {
     id: generateId(),
     ...patientData
   };
+  newPatient.entries = [];
 
   patients.push(newPatient);
   return newPatient;
@@ -34,5 +39,6 @@ const addPatient = (patientData: NewPatient): Patient => {
 
 export default {
   getAllPatients,
+  getPatient,
   addPatient
 };

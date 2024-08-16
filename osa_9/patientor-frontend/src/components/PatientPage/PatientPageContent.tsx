@@ -1,12 +1,29 @@
-import { Patient } from '../../types';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import GenderIcon from './GenderIcon';
-import { List, ListItem, Divider } from '@mui/material';
+import { List, ListItem, ListItemText, Divider } from '@mui/material';
+
+import { Patient, Diagnosis } from '../../types';
+import { apiBaseUrl } from '../../constants';
 
 interface Props {
   patient: Patient;
 }
 
 const PatientPageContent = ({ patient }: Props) => {
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+
+  useEffect(() => {
+    axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`).then(response => {
+      setDiagnoses(response.data);
+    });
+  }, []);
+
+  const getDiagnosisName = (code: string) => {
+    const diagnosis = diagnoses.find(diagnosis => diagnosis.code === code);
+    return diagnosis ? diagnosis.name : 'Monkeypox';
+  };
+
   return (
     <div>
       <h1>{patient.name} <GenderIcon gender={patient.gender} /></h1>
@@ -21,7 +38,7 @@ const PatientPageContent = ({ patient }: Props) => {
             {entry.diagnosisCodes?.map(code => (
               <span key={code}>
                 <ListItem key={code}>
-                  {code}
+                  <ListItemText primary={code} secondary={getDiagnosisName(code)} />
                 </ListItem>
                   <Divider />
               </span>

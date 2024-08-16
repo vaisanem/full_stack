@@ -1,11 +1,12 @@
 import data from '../../data/patients';
-import { Patient, PublicPatientData, NewPatient, Gender } from '../types';
+import { Patient, PublicPatientData, NewPatient, Gender, Entry } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 const patients: Patient[] = data.map(p => {
   return {
     ...p,
-    gender: p.gender as Gender
+    gender: p.gender as Gender,
+    entries: p.entries as Entry[]
   };
 });
 const takenUUIDs = patients.map(p => p.id);
@@ -19,7 +20,7 @@ const generateId = (): string => {
 };
 
 const getAllPatients = (): PublicPatientData[] => {
-  return patients.map(({ ssn, ...rest }) => rest);
+  return patients.map(({ ssn, entries, ...rest }) => rest);
 };
 
 const getPatient = (id: string): Patient | undefined => {

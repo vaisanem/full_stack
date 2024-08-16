@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/:id', (_req, res) => {
   const id = _req.params.id;
   const patient = service.getPatient(id);
-  if (!patient) return res.status(404).json('Could not find patient for id: ' + id);
+  if (!patient) return res.status(404).end();
   return res.json(patient);
 });
 

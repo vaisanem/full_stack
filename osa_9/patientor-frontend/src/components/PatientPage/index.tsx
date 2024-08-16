@@ -1,16 +1,28 @@
 import { useParams } from 'react-router-dom';
-import { Table } from '@mui/material';
+import { useState, useEffect } from 'react';
 
+import PatientPageContent from './PatientPageContent';
 import { Patient } from '../../types';
 
 import patientService from '../../services/patients';
 
 const PatientPage = () => {
   const id = useParams().id as string;
-  const patient = patientService.getPatient(id);
+
+  const [patient, setPatient] = useState<Patient | null>(null);
+
+  useEffect(() => {
+    patientService.getPatient(id).then(patient => {
+      setPatient(patient);
+    }).catch(() => {
+      setPatient(null);
+    });
+  }, [id]);
+
+  if (!patient) return <p>Could not find patient for id: {id}</p>;
 
   return (
-    <div></div>
+    <PatientPageContent patient={patient} />
   );
 };
 

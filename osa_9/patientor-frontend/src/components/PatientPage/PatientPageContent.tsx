@@ -1,28 +1,14 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import GenderIcon from './GenderIcon';
-import { List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 
-import { Patient, Diagnosis } from '../../types';
-import { apiBaseUrl } from '../../constants';
+import GenderIcon from './GenderIcon';
+import { Patient } from '../../types';
+import Entry from './Entry';
 
 interface Props {
   patient: Patient;
 }
 
 const PatientPageContent = ({ patient }: Props) => {
-  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
-
-  useEffect(() => {
-    axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`).then(response => {
-      setDiagnoses(response.data);
-    });
-  }, []);
-
-  const getDiagnosisName = (code: string) => {
-    const diagnosis = diagnoses.find(diagnosis => diagnosis.code === code);
-    return diagnosis ? diagnosis.name : 'Monkeypox';
-  };
 
   return (
     <div>
@@ -30,22 +16,13 @@ const PatientPageContent = ({ patient }: Props) => {
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
       <br />
-      <h3>Entries:</h3>
+      <h3>Entries</h3>
       {patient.entries.map(entry => (
-        <div key={entry.id}>
-          <p>{entry.date} {entry.description}</p>
-          <List>
-            {entry.diagnosisCodes?.map(code => (
-              <span key={code}>
-                <ListItem key={code}>
-                  <ListItemText primary={code} secondary={getDiagnosisName(code)} />
-                </ListItem>
-                  <Divider />
-              </span>
-            ))}
-          </List>
+        <span key={entry.id}>
+          <Entry entry={entry} />
           <Divider />
-        </div>
+          <br />
+        </span>
       ))}
     </div>
   );

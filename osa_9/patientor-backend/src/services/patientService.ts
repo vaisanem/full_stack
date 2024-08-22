@@ -1,5 +1,5 @@
 import data from '../../data/patients';
-import { Patient, PublicPatientData, NewPatient, Gender, Entry } from '../types';
+import { Patient, PublicPatientData, NewPatient, Gender, Entry, NewEntry } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 const patients: Patient[] = data.map(p => {
@@ -9,11 +9,20 @@ const patients: Patient[] = data.map(p => {
     entries: p.entries as Entry[]
   };
 });
-const takenUUIDs = patients.map(p => p.id);
+const takenPatientIds = patients.map(p => p.id);
+const takenEntryIds = patients.flatMap(p => p.entries.map(e => e.id));
 
-const generateId = (): string => {
+const generatePatientId = (): string => {
   let newId = uuidv4();
-  while (takenUUIDs.includes(newId)) {
+  while (takenPatientIds.includes(newId)) {
+    newId = uuidv4();
+  }
+  return newId;
+};
+
+const generateEntryId = (): string => {
+  let newId = uuidv4();
+  while (takenEntryIds.includes(newId)) {
     newId = uuidv4();
   }
   return newId;
@@ -23,23 +32,35 @@ const getAllPatients = (): PublicPatientData[] => {
   return patients.map(({ ssn, entries, ...rest }) => rest);
 };
 
-const getPatient = (id: string): Patient | undefined => {
-  return patients.find(one => one.id === id);
+const getPatient = (patientId: string): Patient | undefined => {
+  return patients.find(one => one.id === patientId);
 };
 
 const addPatient = (patientData: NewPatient): Patient => {
   const newPatient = {
-    id: generateId(),
+    id: generatePatientId(),
+    entries: [],
     ...patientData
   };
-  newPatient.entries = [];
 
   patients.push(newPatient);
   return newPatient;
 };
 
+const addEntry = (patientId: string, newEntry: NewEntry): Entry | undefined => {
+  const patient = getPatient(patientId);
+  if (!patient) return;
+  const entry = {
+    id: generateEntryId(),
+    ...newEntry
+  };
+  patient.entries.push(entry);
+  return entry;
+};
+
 export default {
   getAllPatients,
   getPatient,
-  addPatient
+  addPatient,
+  addEntry
 };

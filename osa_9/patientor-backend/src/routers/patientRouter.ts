@@ -1,8 +1,23 @@
 import express from 'express';
 import service from '../services/patientService';
 import parseNewPatient from '../utils/patient';
+import parseNewEntry from '../utils/entry';
 
 const router = express.Router();
+
+router.post('/:id/entries', (_req, res) => {
+  const id = _req.params.id;
+  try {
+    const newEntry = parseNewEntry(_req.body);
+    const addedEntry = service.addEntry(id, newEntry);
+    if (!addedEntry) return res.status(404).end();
+    return res.json(addedEntry);
+  } catch (e) {
+    let message = 'Could not process the request. ';
+    if (e instanceof Error) message += e.message;
+    return res.status(400).json(message);
+  }
+});
 
 router.get('/:id', (_req, res) => {
   const id = _req.params.id;

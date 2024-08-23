@@ -2,11 +2,18 @@ const isString = (data: unknown): data is string => {
   return typeof data === 'string' || data instanceof String;
 };
 
-export const parseString = (data: unknown): string => {
+export const parseString = (data: unknown, error: string = ''): string => {
   if (!isString(data)) {
-    throw new Error('Expected a string: ' + data);
+    throw new Error('Expected a string' + error + ': ' + data);
   }
   return data;
+};
+
+export const parseNumberOrString = (data: unknown): number | string => {
+  if (!isNaN(Number(data))) {
+    return Number(data);
+  }
+  return parseString(data, " or a number");
 };
 
 export const parseDate = (data: unknown): string => {

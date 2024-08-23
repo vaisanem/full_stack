@@ -1,5 +1,5 @@
 import { Diagnosis, BaseEntry, NewEntry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, HealthCheckRating } from '../types';
-import { parseString, parseDate, isObject } from './common';
+import { parseString, parseNumberOrString, parseDate, isObject } from './common';
 
 const assertNever = (value: never): never => {
   throw new Error(
@@ -8,7 +8,7 @@ const assertNever = (value: never): never => {
 };
 
 const isHealthCheckRating = (data: unknown): data is HealthCheckRating => {
-  return Object.values(HealthCheckRating).includes(parseString(data)); // Can be a number too?
+  return Object.values(HealthCheckRating).includes(parseNumberOrString(data));
 };
 
 const parseHealthCheckRating = (data: unknown): HealthCheckRating => {
@@ -33,6 +33,22 @@ const parseDischarge = (data: unknown): HospitalEntry['discharge'] => {
   };
 };
 
+const parseSickLeave = (data: unknown): OccupationalHealthcareEntry['sickLeave'] => {
+  if (!isObject(data)) throw new Error('Sick leave data is missing');
+
+  const sickLeaveProperties: Array<keyof NonNullable<OccupationalHealthcareEntry['sickLeave']>> = ['startDate', 'endDate'];
+  const hasAllProperties = sickLeaveProperties.every(key => key in data);
+
+  if (!hasAllProperties) throw new Error('Some sick leave data is missing');
+
+  const startDate = (data as { startDate: unknown }).startDate;
+  const endDate = (data as { endDate: unknown }).endDate;
+  return {
+    startDate: parseDate(startDate),
+    endDate: parseDate(endDate)
+  };
+};
+
 const parseDiagnosisCodes = (data: object): Array<Diagnosis['code']> => {
   if (!('diagnosisCodes' in data)) {
     return [] as Array<Diagnosis['code']>;
@@ -52,19 +68,19 @@ const parseNewEntry = (data: unknown): NewEntry => {
     switch (data.type) {
       case 'HealthCheck': {
         if (!('healthCheckRating' in data)) break;
-        const properties = data as Omit<HealthCheckEntry, 'id' | 'diagnosisCodes'>;
+        const properties = data as Record<keyof Omit<HealthCheckEntry, 'id' | 'diagnosisCodes'>, 'unknown'>;
         return {
           type: 'HealthCheck',
           healthCheckRating: parseHealthCheckRating(properties.healthCheckRating),
           date: parseDate(properties.date),
           description: parseString(properties.description),
           specialist: parseString(properties.specialist),
-          diagnosisCodes: parseDiagnosisCodes(properties)
+          diagnosisCodes: parseDiagnosisCodes(properties) // Should be optional property?
         };
       }
       case 'Hospital': {
         if (!('discharge' in data)) break;
-        const properties = data as Omit<HospitalEntry, 'id' | 'diagnosisCodes'>;
+        const properties = data as Record<keyof Omit<HospitalEntry, 'id' | 'diagnosisCodes'>, 'unknown'>;
         return {
           type: 'Hospital',
           discharge: parseDischarge(properties.discharge),
@@ -76,14 +92,19 @@ const parseNewEntry = (data: unknown): NewEntry => {
       }
       case 'OccupationalHealthcare': {
         if (!('employerName' in data)) break;
-        const properties = data as Omit<OccupationalHealthcareEntry, 'id' | 'diagnosisCodes'>;
-        return {
+        const properties = data as Record<keyof Omit<OccupationalHealthcareEntry, 'id' | 'diagnosisCodes'>, 'unknown'>;
+        const entry: Omit<OccupationalHealthcareEntry, 'id'> = {
           type: 'OccupationalHealthcare',
           employerName: parseString(properties.employerName),
           date: parseDate(properties.date),
           description: parseString(properties.description),
           specialist: parseString(properties.specialist),
           diagnosisCodes: parseDiagnosisCodes(properties)
+        };
+        if (!('sickLeave' in data)) return entry;
+        return {
+          ...entry,
+          sickLeave: parseSickLeave(properties.sickLeave)
         };
       }
       default:

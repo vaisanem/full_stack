@@ -1,14 +1,15 @@
 import { Divider } from '@mui/material';
 
 import GenderIcon from './GenderIcon';
-import { Patient } from '../../types';
+import { Patient, Diagnosis } from '../../types';
 import Entry from './Entry';
 
 interface Props {
-  patient: Patient;
+  patient: Patient
+  diagnoses: Diagnosis[]
 }
 
-const PatientPageContent = ({ patient }: Props) => {
+const PatientPageContent = ({ patient, diagnoses }: Props) => {
 
   return (
     <div>
@@ -21,7 +22,7 @@ const PatientPageContent = ({ patient }: Props) => {
       <h3>Entries</h3>
       {patient.entries.map(entry => (
         <span key={entry.id}>
-          <Entry entry={entry} />
+          <Entry entry={entry} diagnoses={diagnoses} />
           <Divider />
           <br />
         </span>

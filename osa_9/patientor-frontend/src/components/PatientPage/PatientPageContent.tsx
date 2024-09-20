@@ -20,7 +20,7 @@ const PatientPageContent = ({ patient, diagnoses, onSubmit }: Props) => {
       <p>occupation: {patient.occupation}</p>
       <br />
       <p>Show errors here?</p>
-      <AddEntryForm onSubmit={onSubmit} />
+      <AddEntryForm onSubmit={onSubmit} diagnoses={diagnoses} />
       <br />
       <h3>Entries</h3>
       {patient.entries.map(entry => (

@@ -1,5 +1,5 @@
 import { Diagnosis, BaseEntry, NewEntry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, HealthCheckRating } from '../types';
-import { parseString, parseNumberOrString, parseDate, isObject } from './common';
+import { parseString, parseNumberOrString, parseDate, isObject, notEmpty } from './common';
 
 const assertNever = (value: never): never => {
   throw new Error(
@@ -29,7 +29,7 @@ const parseDischarge = (data: unknown): HospitalEntry['discharge'] => {
   const properties = data as Record<keyof HospitalEntry['discharge'], unknown>;
   return {
     date: parseDate(properties.date),
-    criteria: parseString(properties.criteria)
+    criteria: notEmpty(parseString(properties.criteria), 'Discharge criteria')
   };
 };
 
@@ -67,38 +67,38 @@ const parseNewEntry = (data: unknown): NewEntry => {
     parseString(data.type);
     switch (data.type) {
       case 'HealthCheck': {
-        if (!('healthCheckRating' in data)) break;
+        if (!('healthCheckRating' in data)) break; // Throw error?
         const properties = data as Record<keyof Omit<HealthCheckEntry, 'id' | 'diagnosisCodes'>, 'unknown'>;
         return {
           type: 'HealthCheck',
           healthCheckRating: parseHealthCheckRating(properties.healthCheckRating),
           date: parseDate(properties.date),
-          description: parseString(properties.description),
-          specialist: parseString(properties.specialist),
-          diagnosisCodes: parseDiagnosisCodes(properties) // Should be optional property?
+          description: notEmpty(parseString(properties.description), 'Description'),
+          specialist: notEmpty(parseString(properties.specialist), 'Specialist'),
+          diagnosisCodes: parseDiagnosisCodes(properties)
         };
       }
       case 'Hospital': {
-        if (!('discharge' in data)) break;
+        if (!('discharge' in data)) break; // Throw error?
         const properties = data as Record<keyof Omit<HospitalEntry, 'id' | 'diagnosisCodes'>, 'unknown'>;
         return {
           type: 'Hospital',
           discharge: parseDischarge(properties.discharge),
           date: parseDate(properties.date),
-          description: parseString(properties.description),
-          specialist: parseString(properties.specialist),
+          description: notEmpty(parseString(properties.description), 'Description'),
+          specialist: notEmpty(parseString(properties.specialist), 'Specialist'),
           diagnosisCodes: parseDiagnosisCodes(properties)
         };
       }
       case 'OccupationalHealthcare': {
-        if (!('employerName' in data)) break;
+        if (!('employerName' in data)) break; // Throw error?
         const properties = data as Record<keyof Omit<OccupationalHealthcareEntry, 'id' | 'diagnosisCodes'>, 'unknown'>;
         const entry: Omit<OccupationalHealthcareEntry, 'id'> = {
           type: 'OccupationalHealthcare',
-          employerName: parseString(properties.employerName),
+          employerName: notEmpty(parseString(properties.employerName), 'Employer name'),
           date: parseDate(properties.date),
-          description: parseString(properties.description),
-          specialist: parseString(properties.specialist),
+          description: notEmpty(parseString(properties.description), 'Description'),
+          specialist: notEmpty(parseString(properties.specialist), 'Specialist'),
           diagnosisCodes: parseDiagnosisCodes(properties)
         };
         if (!('sickLeave' in data)) return entry;

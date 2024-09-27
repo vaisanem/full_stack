@@ -1,4 +1,4 @@
-import { Divider } from '@mui/material';
+import { Alert, Divider } from '@mui/material';
 
 import GenderIcon from './GenderIcon';
 import { Patient, Diagnosis, NewEntry } from '../../types';
@@ -8,10 +8,11 @@ import AddEntryForm from './AddEntryForm';
 interface Props {
   patient: Patient
   diagnoses: Diagnosis[],
-  onSubmit: (values: NewEntry) => void
+  onSubmit: (values: NewEntry) => void,
+  error: string
 }
 
-const PatientPageContent = ({ patient, diagnoses, onSubmit }: Props) => {
+const PatientPageContent = ({ patient, diagnoses, onSubmit, error }: Props) => {
 
   return (
     <div>
@@ -19,7 +20,7 @@ const PatientPageContent = ({ patient, diagnoses, onSubmit }: Props) => {
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
       <br />
-      <p>Show errors here?</p>
+      {error && <Alert severity="error">{error}</Alert>}
       <AddEntryForm onSubmit={onSubmit} diagnoses={diagnoses} />
       <br />
       <h3>Entries</h3>

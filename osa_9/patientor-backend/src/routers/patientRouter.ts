@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/:id/entries', (_req, res) => {
   const id = _req.params.id;
   try {
+    console.log(_req.body);
     const newEntry = parseNewEntry(_req.body);
     const addedEntry = service.addEntry(id, newEntry);
     if (!addedEntry) return res.status(404).end();

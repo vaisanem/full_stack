@@ -9,6 +9,13 @@ export const parseString = (data: unknown, error: string = ''): string => {
   return data;
 };
 
+export const notEmpty = (data: string, property: string): string => {
+  if (!data || data.length === 0) {
+    throw new Error(property + ' is missing');
+  }
+  return data;
+};
+
 export const parseNumberOrString = (data: unknown): number | string => {
   if (!isNaN(Number(data))) {
     return Number(data);

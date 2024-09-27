@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { isAxiosError } from 'axios';
 
 import PatientPageContent from './PatientPageContent';
 import { Patient, Diagnosis, NewEntry } from '../../types';
@@ -12,7 +13,7 @@ const PatientPage = () => {
 
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
-  // const [error, setError] = useState<string>();
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchDiagnoses = async () => {
@@ -36,14 +37,16 @@ const PatientPage = () => {
     try {
       const entry = await patientService.addEntry(id, values);
       setPatient({ ...patient, entries: patient.entries.concat(entry) });
+      setError('');
     } catch (e: unknown) {
       console.error(e);
+      if (isAxiosError(e) && e?.response?.data) setError(e.response.data);
     }
   };
 
   return (
     <div>
-      <PatientPageContent patient={patient} diagnoses={diagnoses} onSubmit={submitNewEntry} />
+      <PatientPageContent patient={patient} diagnoses={diagnoses} onSubmit={submitNewEntry} error={error} />
     </div>
   );
 };

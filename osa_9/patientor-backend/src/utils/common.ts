@@ -10,7 +10,7 @@ export const parseString = (data: unknown, error: string = ''): string => {
 };
 
 export const notEmpty = (data: string, property: string): string => {
-  if (!data || data.length === 0) {
+  if (!data.trim()) {
     throw new Error(property + ' is missing');
   }
   return data;

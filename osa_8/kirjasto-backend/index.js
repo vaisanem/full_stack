@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql } = require('@apollo/server')
 
 let authors = [
   {
@@ -86,26 +86,26 @@ let books = [
 
 const typeDefs = gql`
   type Author {
-    id: ID!,
-    name: String!,
-    born: Int,
+    id: ID!
+    name: String!
+    born: Int
     bookCount: Int
-  },
+  }
   type Book {
-    id: ID!,
-    title: String!,
-    author: String!,
-    published: Int!,
+    id: ID!
+    title: String!
+    author: String!
+    published: Int!
     genres: [String]!
-  },
+  }
   type Query {
-    hello: String!,
-    bookCount: Int!,
-    authorCount: Int!,
+    hello: String!
+    bookCount: Int!
+    authorCount: Int!
     allBooks(
-      author: String,
+      author: String
       genre: String
-    ): [Book]!,
+    ): [Book]!
     allAuthors: [Author]!
   }
 `

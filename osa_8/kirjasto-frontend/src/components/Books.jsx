@@ -3,6 +3,10 @@ const Books = (props) => {
     return null
   }
 
+  if (props.books.loading) {
+    return <div>loading...</div>
+  }
+
   return (
     <div>
       <h2>books</h2>

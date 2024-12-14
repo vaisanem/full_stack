@@ -3,10 +3,6 @@ const Authors = (props) => {
     return null
   }
 
-  if (props.authors.loading) {
-    return <div>loading...</div>
-  }
-
   return (
     <div>
       <h2>authors</h2>

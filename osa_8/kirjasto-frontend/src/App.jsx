@@ -28,7 +28,7 @@ const ALL_BOOKS = gql`
  `
 
 const App = () => {
-  const [page, setPage] = useState("authors")
+  const [page, setPage] = useState("books")
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 

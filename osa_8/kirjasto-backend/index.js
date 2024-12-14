@@ -1,4 +1,7 @@
-const { ApolloServer, gql } = require('@apollo/server')
+const { ApolloServer } = require('@apollo/server')
+const { gql } = require('graphql-tag')
+const { startStandaloneServer } = require('@apollo/server/standalone')
+const { v4: uuidv4 } = require('uuid')
 
 let authors = [
   {
@@ -108,14 +111,30 @@ const typeDefs = gql`
     ): [Book]!
     allAuthors: [Author]!
   }
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String]!
+    ): Book!
+  }
 `
 
-Array.prototype.filterByAuthor = function(author) {
+/* Array.prototype.filterByAuthor = function(author) {
   return author ? this.filter(one => one.author === author) : this
+} */
+
+const filterByAuthor = (books, author) => {
+return author ? books.filter(one => one.author === author) : books
 }
 
-Array.prototype.filterByGenre = function(genre) {
+/* Array.prototype.filterByGenre = function(genre) {
   return genre ? this.filter(one => one.genres.includes(genre)) : this
+} */
+
+const filterByGenre = (books, genre) => {
+  return genre ? books.filter(one => one.genres.includes(genre)) : books
 }
 
 const resolvers = {
@@ -123,14 +142,25 @@ const resolvers = {
     hello: () => { return "world" },
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (root, args) => books
+    /* allBooks: (root, args) => books
       .filterByAuthor(args.author)
-      .filterByGenre(args.genre),
+      .filterByGenre(args.genre),*/
+    allBooks: (root, args) => {
+      return filterByGenre(filterByAuthor(books, args.author), args.genre)
+    },
     allAuthors: () => authors
   },
   Author: {
     bookCount: (root) => {
       return books.filter(one => one.author === root.name).length
+    }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      authors.push({ id: uuidv4(), name: args.author })
+      const book = { id: uuidv4(), ...args }
+      books.push(book)
+      return book
     }
   }
 }
@@ -140,7 +170,8 @@ const server = new ApolloServer({
   resolvers,
 })
 
-server.listen().then(({ url }) => {
+startStandaloneServer(server, {
+  listen: { port: 4000 },
+}).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
-

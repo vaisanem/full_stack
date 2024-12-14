@@ -118,6 +118,10 @@ const typeDefs = gql`
       published: Int!
       genres: [String]!
     ): Book!
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 `
 
@@ -135,6 +139,10 @@ return author ? books.filter(one => one.author === author) : books
 
 const filterByGenre = (books, genre) => {
   return genre ? books.filter(one => one.genres.includes(genre)) : books
+}
+
+const findAuthor = (name) => {
+return authors.find(one => one.name === name)
 }
 
 const resolvers = {
@@ -157,10 +165,16 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
-      authors.push({ id: uuidv4(), name: args.author })
+      !findAuthor(args.author) && authors.push({ id: uuidv4(), name: args.author })
       const book = { id: uuidv4(), ...args }
       books.push(book)
       return book
+    },
+    editAuthor: (root, args) => {
+      const author = findAuthor(args.name)
+      if (!author) return null
+      author.born = args.setBornTo
+      return author
     }
   }
 }

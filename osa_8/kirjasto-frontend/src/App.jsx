@@ -2,9 +2,31 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { gql, useQuery } from '@apollo/client'
+import Authors from "./components/Authors";
+import Books from "./components/Books";
+import NewBook from "./components/NewBook";
 
-function App() {
-  const [count, setCount] = useState(0)
+const ALL_AUTHORS = gql`
+  query { 
+    allAuthors {
+      name, 
+      born, 
+      bookCount
+    }
+  }
+ `
+
+const App = () => {
+  const [page, setPage] = useState("authors")
+  const authors = useQuery(ALL_AUTHORS)
+
+   /*
+  client.query({ query })
+    .then((response) => {
+      console.log(response.data)
+   })
+   */
 
   return (
     <>
@@ -16,18 +38,19 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div>
+        <div>
+          <button onClick={() => setPage("authors")}>authors</button>
+          <button onClick={() => setPage("books")}>books</button>
+          <button onClick={() => setPage("add")}>add book</button>
+        </div>
+
+        <Authors show={page === "authors"} authors={authors} />
+
+        <Books show={page === "books"} />
+
+        <NewBook show={page === "add"} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

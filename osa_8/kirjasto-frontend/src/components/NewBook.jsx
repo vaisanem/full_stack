@@ -62,11 +62,11 @@ const NewBook = (props) => {
             onChange={({ target }) => setGenre(target.value)}
           />
           <button onClick={addGenre} type="button">
-            add genre
+            Add genre
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <button type="submit">Create book</button>
       </form>
     </div>
   )

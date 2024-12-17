@@ -2,46 +2,20 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
-
-const ALL_AUTHORS = gql`
-  query { 
-    allAuthors {
-      name, 
-      born, 
-      bookCount
-    }
-  }
- `
-
-const ALL_BOOKS = gql`
-  query { 
-    allBooks {
-      title, 
-      author, 
-      published
-    }
-  }
- `
+import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("books")
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
-/*
-client.query({ query })
-  .then((response) => {
-    console.log(response.data)
- })
- */
-
   return (
     <>
-      <div>
+      <div style={{ padding: "30px" }}>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>

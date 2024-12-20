@@ -2,6 +2,24 @@ const { ApolloServer } = require('@apollo/server')
 const { gql } = require('graphql-tag')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v4: uuidv4 } = require('uuid')
+const mongoose = require('mongoose')
+const Book = require('./models/Book')
+const Author = require('./models/Author')
+
+mongoose.set('strictQuery', false)
+
+require('dotenv').config()
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+console.log('connecting to', MONGODB_URI)
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
 
 let authors = [
   {
@@ -97,7 +115,7 @@ const typeDefs = gql`
   type Book {
     id: ID!
     title: String!
-    author: String!
+    author: Author!
     published: Int!
     genres: [String]!
   }
@@ -141,40 +159,43 @@ const filterByGenre = (books, genre) => {
   return genre ? books.filter(one => one.genres.includes(genre)) : books
 }
 
-const findAuthor = (name) => {
-return authors.find(one => one.name === name)
+const findAuthor = async (name) => {
+  return Author.findOne({ name: name })
 }
 
 const resolvers = {
   Query: {
     hello: () => { return "world" },
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
     /* allBooks: (root, args) => books
       .filterByAuthor(args.author)
       .filterByGenre(args.genre),*/
-    allBooks: (root, args) => {
-      return filterByGenre(filterByAuthor(books, args.author), args.genre)
+    /* allBooks: async (root, args) => {
+      return filterByGenre(filterByAuthor(async () => Book.find({}), args.author), args.genre) // FIXME: filter on the mongodb side
+    },*/
+    allBooks: async (root, args) => {
+      return args.genre ? args.author ? Book.find({ author: args.author, genre: args.genre }) : Book.find({ genre: args.genre }) : args.author ? Book.find({ author: args.author }) : Book.find({}) // FIXME: does not work as gneres is an array and author is an object
     },
-    allAuthors: () => authors
+    allAuthors: async () => Author.find({})
   },
   Author: {
-    bookCount: (root) => {
-      return books.filter(one => one.author === root.name).length
+    bookCount: async (root) => {
+      return Book.find({}).filter(one => one.author === root.name).length // FIXME: filter on the mongodb side
     }
   },
   Mutation: {
-    addBook: (root, args) => {
-      !findAuthor(args.author) && authors.push({ id: uuidv4(), name: args.author })
-      const book = { id: uuidv4(), ...args }
-      books.push(book)
-      return book
+    addBook: async (root, args) => {
+      let author = await findAuthor(args.author)
+      !author ? author = new Author({ name: args.author }).save() : null
+      const book = new Book({ author: authro, ...args })
+      return book.save()
     },
-    editAuthor: (root, args) => {
-      const author = findAuthor(args.name)
+    editAuthor: async (root, args) => {
+      const author = await findAuthor(args.name)
       if (!author) return null
       author.born = args.setBornTo
-      return author
+      return author.save()
     }
   }
 }
@@ -185,7 +206,7 @@ const server = new ApolloServer({
 })
 
 startStandaloneServer(server, {
-  listen: { port: 4000 },
+  listen: { port: process.env.PORT },
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })

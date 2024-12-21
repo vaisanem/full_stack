@@ -174,20 +174,21 @@ const resolvers = {
     /* allBooks: async (root, args) => {
       return filterByGenre(filterByAuthor(async () => Book.find({}), args.author), args.genre) // FIXME: filter on the mongodb side
     },*/
-    allBooks: async (root, args) => { // Return author as object or string (name)?
-      return args.genre ? args.author ? Book.find({ author: args.author, genre: args.genre }) : Book.find({ genre: args.genre }) : args.author ? Book.find({ author: args.author }) : Book.find({}) // FIXME: does not work as genres is an array and author is an object
+    allBooks: async (root, args) => {
+      return args.genre ? args.author ? Book.find({ author: args.author, genre: args.genre }) : Book.find({ genre: args.genre }) : args.author ? Book.find({ author: args.author }) : Book.find({}) // FIXME: does not work as genres is an array + book.author is ObjectID
     },
     allAuthors: async () => Author.find({})
   },
   Author: {
-    bookCount: async (root) => {
-      return Book.find({ author: root.name }).length // FIXME: author is ObjectID, should it be Object insted? Make mongodb do the counting?
+    bookCount: async (root) => { // Is there a more efficient way?
+      const author = await findAuthor(root.name)
+      return Book.countDocuments({ author: author.id })
     }
   },
   Mutation: {
     addBook: async (root, args) => {
       let author = await findAuthor(args.author)
-      !author ? author = new Author({ name: args.author }).save() : null
+      !author ? author = new Author({ name: args.author }).save() : null // set born explicitly as null?
       const book = new Book({ author: author, ...args })
       return book.save()
     },

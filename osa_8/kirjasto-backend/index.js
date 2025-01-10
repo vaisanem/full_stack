@@ -90,7 +90,7 @@ const resolvers = {
       return filterByGenre(filterByAuthor(async () => Book.find({}), args.author), args.genre) // FIXME: filter on the mongodb side
     },*/
     allBooks: async (root, args) => {
-      return args.genre ? args.author ? Book.find({ author: args.author, genres: args.genre }) : Book.find({ genres: args.genre }).populate('author') : args.author ? Book.find({ author: args.author }) : Book.find({}).populate('author')
+      return args.genre ? args.author ? Book.find({ genres: args.genre }).populate({ path: 'author', match: { name: args.author } }).then(b => b.filter(one => one.author)) : Book.find({ genres: args.genre }).populate('author') : args.author ? Book.find().populate({ path: 'author', match: { name: args.author } }).then(b => b.filter(one => one.author)) : Book.find().populate('author')
     },
     allAuthors: async () => Author.find({})
   },

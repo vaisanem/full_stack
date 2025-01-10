@@ -1,5 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { gql } = require('graphql-tag')
+const { GraphQLError } = require('graphql');
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const mongoose = require('mongoose')
 const Book = require('./models/Book')
@@ -95,7 +96,7 @@ const resolvers = {
     allAuthors: async () => Author.find({})
   },
   Author: {
-    bookCount: async (root) => { // Implement with single query?
+    bookCount: async (root) => {
       const author = await findAuthor(root.name)
       return Book.countDocuments({ author: author._id })
     }
@@ -108,10 +109,38 @@ const resolvers = {
       return book.save()
     },
     editAuthor: async (root, args) => {
-      const author = await findAuthor(args.name)
-      if (!author) return null
+      let author;
+      try {
+        author = await findAuthor(args.name)
+      } catch (error) {
+        throw new GraphQLError('This will never be ran, trust me', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            fyi: error.message
+          }
+        })
+      }
+      if (!author) {
+        throw new GraphQLError('Author not found', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+          }
+        })
+      }
       author.born = args.setBornTo
-      return author.save()
+      try {
+        return author.save()
+      } catch (error) {
+        throw new GraphQLError('Neither this will be ran, I think', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.setBornTo,
+            fyi: error.message
+          }
+        })
+      }
     }
   }
 }

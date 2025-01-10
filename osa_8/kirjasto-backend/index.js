@@ -175,21 +175,21 @@ const resolvers = {
       return filterByGenre(filterByAuthor(async () => Book.find({}), args.author), args.genre) // FIXME: filter on the mongodb side
     },*/
     allBooks: async (root, args) => {
-      return args.genre ? args.author ? Book.find({ author: args.author, genre: args.genre }) : Book.find({ genre: args.genre }) : args.author ? Book.find({ author: args.author }) : Book.find({}) // FIXME: does not work as genres is an array + book.author is ObjectID
+      return args.genre ? args.author ? Book.find({ author: args.author, genres: args.genre }) : Book.find({ genres: args.genre }).populate('author') : args.author ? Book.find({ author: args.author }) : Book.find({}).populate('author')
     },
     allAuthors: async () => Author.find({})
   },
   Author: {
-    bookCount: async (root) => { // Is there a more efficient way?
+    bookCount: async (root) => { // Implement with single query?
       const author = await findAuthor(root.name)
-      return Book.countDocuments({ author: author.id })
+      return Book.countDocuments({ author: author._id })
     }
   },
   Mutation: {
     addBook: async (root, args) => {
       let author = await findAuthor(args.author)
-      !author ? author = new Author({ name: args.author }).save() : null // set born explicitly as null?
-      const book = new Book({ author: author, ...args })
+      !author ? author = await new Author({ name: args.author, born: null }).save() : null
+      const book = new Book({ author: author, title: args.title, published: args.published, genres: args.genres })
       return book.save()
     },
     editAuthor: async (root, args) => {

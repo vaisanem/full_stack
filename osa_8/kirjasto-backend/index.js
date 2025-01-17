@@ -195,7 +195,7 @@ const resolvers = {
       }
     },
     createUser: (root, args) => {
-      const user = await new User({ username: args.username, favoriteGenre: args.favoriteGenre })
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
 
       try {
         user.save()

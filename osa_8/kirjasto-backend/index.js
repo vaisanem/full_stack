@@ -79,6 +79,17 @@ const findAuthor = async (name) => {
   return Author.findOne({ name: name })
 }
 
+const validateAuthorName = (name) => {
+  if (name.length < 4) {
+    throw new GraphQLError('Author name is too short', {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+        invalidArgs: name
+      }
+    })
+  }
+ }
+
 const resolvers = {
   Query: {
     hello: () => { return "world" },
@@ -103,28 +114,30 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
+      validateAuthorName(args.author)
       let author = await findAuthor(args.author)
       !author ? author = await new Author({ name: args.author, born: null }).save() : null
       const book = new Book({ author: author, title: args.title, published: args.published, genres: args.genres })
-      return book.save()
+      try {
+        return await book.save()
+      } catch (error) {
+          throw new GraphQLError('Book creation failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.title,
+              fyi: error.message
+            }
+          }) 
+      }
     },
     editAuthor: async (root, args) => {
       let author;
-      try {
-        author = await findAuthor(args.name)
-      } catch (error) {
-        throw new GraphQLError('This will never be ran, trust me', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
-            fyi: error.message
-          }
-        })
-      }
+      validateAuthorName(args.name)
+      author = await findAuthor(args.name)
       if (!author) {
         throw new GraphQLError('Author not found', {
           extensions: {
-            code: 'BAD_USER_INPUT',
+            code: 'NOT_FOUND',
             invalidArgs: args.name,
           }
         })
@@ -133,9 +146,9 @@ const resolvers = {
       try {
         return author.save()
       } catch (error) {
-        throw new GraphQLError('Neither this will be ran, I think', {
+        throw new GraphQLError('I hope this will never be executed', {
           extensions: {
-            code: 'BAD_USER_INPUT',
+            code: 'INTERNAL SERVER ERROR',
             invalidArgs: args.setBornTo,
             fyi: error.message
           }

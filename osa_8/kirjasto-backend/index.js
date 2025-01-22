@@ -103,7 +103,7 @@ const validateUser = (user, action) => {
     throw new GraphQLError('Authentication failed', {
       extensions: {
         code: 'UNAUTHORIZED',
-        fyi: 'You must be logged in to ${action}'
+        fyi: `You must be logged in to ${action}`
       }
     })
   }

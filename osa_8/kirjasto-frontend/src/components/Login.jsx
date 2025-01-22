@@ -5,6 +5,8 @@ const Login = ({ show, setPage, setToken }) => {
 
   const [login] = useMutation(LOGIN)
 
+  if (!show) return null
+
   const submit = async (event) => {
     event.preventDefault()
 
@@ -13,12 +15,12 @@ const Login = ({ show, setPage, setToken }) => {
     //!data.login ? setPage("login") : null
 
     if (data.login.value) {
-      setToken(data.login.value)
+      const token = data.login.value
+      setToken(token)
+      localStorage.setItem('kirjasto-user-token', token)
       setPage("books")
     }
   }
-
-  if (!show) return null
 
   return (
     <div>

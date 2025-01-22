@@ -50,7 +50,8 @@ const Authors = (props) => {
           name
           <br></br>
           <Select
-            defaultValue={nameOptions[0]}
+            //defaultValue={nameOptions[0]}
+            defaultValue={null}
             onChange={setNameOption}
             options={nameOptions}
             className="react-select"

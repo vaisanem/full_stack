@@ -211,7 +211,7 @@ const resolvers = {
       }
     },
     login: async (root, args) => {
-      const password = process.env.UNIVERSAL_PASSWORD_IS_KIRJA123
+      const password = process.env.UNIVERSAL_PASSWORD_IS_BOOK123
       const user = await User.findOne({ username: args.username })
 
       if (!user || args.password !== password) {

@@ -154,7 +154,7 @@ const resolvers = {
       const book = new Book({ author: author, title: args.title, published: args.published, genres: args.genres })
 
       try {
-        return await book.save()
+        return book.save()
       } catch (error) {
           throw new GraphQLError('Book creation failed', {
             extensions: {
@@ -198,7 +198,7 @@ const resolvers = {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
 
       try {
-        user.save()
+        return user.save()
       } catch (error) {
         throw new GraphQLError('User creation failed', {
           extensions: {

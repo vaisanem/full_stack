@@ -46,12 +46,14 @@ const Authors = (props) => {
       </table>
       <h4>Set birthyear</h4>
       <form onSubmit={submit}>
-        <div>
+        <div style={{ width: "100%", textAlign: "center" }}>
           name
+          <br></br>
           <Select
             defaultValue={nameOptions[0]}
             onChange={setNameOption}
             options={nameOptions}
+            className="react-select"
           />
         </div>
         <div>

@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.react-select {
+    width: 175px;
+    display: inline-block;
+}

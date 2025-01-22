@@ -3,13 +3,16 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { useQuery } from '@apollo/client'
+import Menu from './components/Menu'
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import Login from "./components/Login";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("books")
+  const [token, setToken] = useState(null)
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
@@ -24,17 +27,15 @@ const App = () => {
         </a>
       </div>
       <div>
-        <div>
-          <button onClick={() => setPage("authors")}>Authors</button>
-          <button onClick={() => setPage("books")}>Books</button>
-          <button onClick={() => setPage("add")}>Add book</button>
-        </div>
+        <Menu token={token} setToken={setToken} setPage={setPage} />
 
         <Authors show={page === "authors"} authors={authors} />
 
         <Books show={page === "books"} books={books} />
 
         <NewBook show={page === "add"} />
+
+        <Login show={page === "login"} setPage={setPage} setToken={setToken} />
       </div>
     </>
   )

@@ -5,7 +5,6 @@ import Select from 'react-select';
 
 const Authors = (props) => {
 
-  const [nameOption, setNameOption] = useState(null)
   const [birthyear, setBirthyear] = useState('')
   const [editBirthyear] = useMutation(EDIT_AUTHOR_BIRTHYEAR, { refetchQueries: [{ query: ALL_AUTHORS }] })
 
@@ -21,7 +20,7 @@ const Authors = (props) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    editBirthyear({ variables: { name: nameOption.value, birthyear: parseInt(birthyear)} })
+    editBirthyear({ variables: { name: event.target.name.value, birthyear: parseInt(birthyear)} })
     setBirthyear('')
   }
 
@@ -44,16 +43,15 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h4>Set birthyear</h4>
+      <h3>Set birthyear</h3>
       <form onSubmit={submit}>
         <div style={{ width: "100%", textAlign: "center" }}>
           name
           <br></br>
           <Select
-            //defaultValue={nameOptions[0]}
-            defaultValue={null}
-            onChange={setNameOption}
+            defaultValue={nameOptions[0]}
             options={nameOptions}
+            name="name"
             className="react-select"
           />
         </div>

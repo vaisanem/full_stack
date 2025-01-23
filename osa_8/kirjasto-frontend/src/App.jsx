@@ -12,7 +12,7 @@ import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("books")
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(() => localStorage.getItem('kirjasto-user-token'))
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
@@ -33,7 +33,7 @@ const App = () => {
 
         <Books show={page === "books"} books={books} />
 
-        <NewBook show={page === "add"} />
+        <NewBook show={page === "add"} setPage={setPage} />
 
         <Login show={page === "login"} setPage={setPage} setToken={setToken} />
       </div>

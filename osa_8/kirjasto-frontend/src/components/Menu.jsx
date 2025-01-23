@@ -2,6 +2,7 @@ import BaseMenu from './BaseMenu'
 import ExtendedMenu from './ExtendedMenu'
 
 const Menu = ({ token, setToken, setPage }) => {
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <BaseMenu setPage={setPage} />

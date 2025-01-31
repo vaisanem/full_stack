@@ -8,12 +8,11 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
-import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
+import { ALL_BOOKS } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("books")
   const [token, setToken] = useState(() => localStorage.getItem('kirjasto-user-token'))
-  const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
   if (books.loading) return <div>loading...</div>
@@ -33,7 +32,7 @@ const App = () => {
       <div>
         <Menu token={token} setToken={setToken} setPage={setPage} />
 
-        <Authors show={page === "authors"} authors={authors} token={token} />
+        <Authors show={page === "authors"} token={token} />
 
         <Books show={page === "books"} genreOptions={genreOptions} />
 

@@ -1,9 +1,10 @@
-import { useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { EDIT_AUTHOR_BIRTHYEAR, ALL_AUTHORS } from '../queries'
 import EditAuthor from './EditAuthor'
 
 const Authors = (props) => {
 
+  const authors = useQuery(ALL_AUTHORS)
   const [editBirthyear] = useMutation(EDIT_AUTHOR_BIRTHYEAR, { refetchQueries: [{ query: ALL_AUTHORS }] })
 
   if (!props.show) {
@@ -20,7 +21,7 @@ const Authors = (props) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {props.authors.data.allAuthors.map((a) => (
+          {authors.data.allAuthors.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
@@ -29,7 +30,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <EditAuthor authors={props.authors} editBirthyear={editBirthyear} token={props.token} />
+      <EditAuthor authors={authors} editBirthyear={editBirthyear} token={props.token} />
     </div>
   )
 }

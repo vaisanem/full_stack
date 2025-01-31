@@ -29,7 +29,7 @@ const App = () => {
       <div>
         <Menu token={token} setToken={setToken} setPage={setPage} />
 
-        <Authors show={page === "authors"} authors={authors} />
+        <Authors show={page === "authors"} authors={authors} token={token} />
 
         <Books show={page === "books"} books={books} />
 

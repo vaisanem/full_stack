@@ -16,6 +16,10 @@ const App = () => {
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
+  if (books.loading) return <div>loading...</div>
+
+  const genreOptions = new Set(books.data.allBooks.flatMap(b => b.genres))
+
   return (
     <>
       <div style={{ padding: "30px" }}>
@@ -31,7 +35,7 @@ const App = () => {
 
         <Authors show={page === "authors"} authors={authors} token={token} />
 
-        <Books show={page === "books"} books={books} />
+        <Books show={page === "books"} genreOptions={genreOptions} />
 
         <NewBook show={page === "add"} setPage={setPage} />
 

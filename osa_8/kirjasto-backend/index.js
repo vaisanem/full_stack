@@ -119,7 +119,7 @@ const validateAuthorName = (name) => {
       }
     })
   }
- }
+}
 
 const resolvers = {
   Query: {

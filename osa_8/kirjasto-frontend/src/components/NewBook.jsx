@@ -62,7 +62,7 @@ const NewBook = (props) => {
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
           />
-          <button onClick={addGenre} type="button">
+          <button onClick={addGenre} type="button" disabled={!genre}>
             Add genre
           </button>
         </div>

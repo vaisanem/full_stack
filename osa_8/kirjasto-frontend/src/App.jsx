@@ -4,11 +4,12 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { useQuery } from '@apollo/client'
 import Menu from './components/Menu'
-import Authors from "./components/Authors";
-import Books from "./components/Books";
-import NewBook from "./components/NewBook";
-import Login from "./components/Login";
-import { ALL_BOOKS } from "./queries";
+import Authors from "./components/Authors"
+import Books from "./components/Books"
+import NewBook from "./components/NewBook"
+import Login from "./components/Login"
+import Recommend from './components/Recommend'
+import { ALL_BOOKS } from "./queries"
 
 const App = () => {
   const [page, setPage] = useState("books")
@@ -39,6 +40,8 @@ const App = () => {
         <NewBook show={page === "add"} setPage={setPage} />
 
         <Login show={page === "login"} setPage={setPage} setToken={setToken} />
+
+        <Recommend show={page === "recommend"} />
       </div>
     </>
   )

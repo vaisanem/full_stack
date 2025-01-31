@@ -15,6 +15,7 @@ const ExtendedMenu = ({ token, setToken, setPage }) => {
     return (
       <div>
         <button onClick={() => setPage("add")}>Add book</button>
+        <button onClick={() => setPage("recommend")}>Recommendations</button>
         <button onClick={() => logOut()}>Log out</button>
       </div>
     )

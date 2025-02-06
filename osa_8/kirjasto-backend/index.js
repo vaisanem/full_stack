@@ -137,6 +137,7 @@ const resolvers = {
     },
     allAuthors: async () => Author.find({}),
     me: async (root, args, { currentUser }) => {
+      console.log(currentUser)
       return currentUser
     }
   },
@@ -210,7 +211,7 @@ const resolvers = {
         })
       }
     },
-    login: async (root, args) => {
+    login: async (root, args, { currentUser }) => {
       const password = process.env.UNIVERSAL_PASSWORD_IS_BOOK123
       const user = await User.findOne({ username: args.username })
 
@@ -222,6 +223,9 @@ const resolvers = {
           }
         })
       }
+
+      currentUser = user
+      console.log(currentUser)
 
       const userForToken = {
         username: user.username,
@@ -248,6 +252,7 @@ startStandaloneServer(server, {
         trimmedToken, process.env.JWT_SECRET
       )
       const currentUser = await User.findById(decodedToken.id)
+      console.log(currentUser)
       return { currentUser }
     }
     return { currentUser: null }

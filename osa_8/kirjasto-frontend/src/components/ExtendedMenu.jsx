@@ -1,15 +1,4 @@
-import {useApolloClient} from '@apollo/client'
-
-const ExtendedMenu = ({ token, setToken, setPage }) => {
-
-  const client = useApolloClient()
-
-  const logOut = () => {
-    setToken(null)
-    localStorage.clear()
-    client.resetStore()
-    setPage("books")
-  }
+const ExtendedMenu = ({ token, logOut, setPage }) => {
 
   if (token) {
     return (

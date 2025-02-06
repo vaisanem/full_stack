@@ -16,8 +16,10 @@ const Login = ({ show, setPage, setToken }) => {
 
     if (data.login.value) {
       const token = data.login.value
-      setToken(token)
+      console.log(localStorage.getItem('kirjasto-user-token'))
       localStorage.setItem('kirjasto-user-token', token)
+      setToken(token)
+      console.log(token)
       setPage("books")
     }
   }

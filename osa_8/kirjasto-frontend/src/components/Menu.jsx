@@ -1,12 +1,12 @@
 import BaseMenu from './BaseMenu'
 import ExtendedMenu from './ExtendedMenu'
 
-const Menu = ({ token, setToken, setPage }) => {
+const Menu = ({ token, logOut, setPage }) => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <BaseMenu setPage={setPage} />
-      <ExtendedMenu token={token} setToken={setToken} setPage={setPage} />
+      <ExtendedMenu token={token} logOut={logOut} setPage={setPage} />
     </div>
   )
 }

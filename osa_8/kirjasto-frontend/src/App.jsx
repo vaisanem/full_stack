@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { useQuery } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 import Menu from './components/Menu'
 import Authors from "./components/Authors"
 import Books from "./components/Books"
@@ -15,8 +15,16 @@ const App = () => {
   const [page, setPage] = useState("books")
   const [token, setToken] = useState(() => localStorage.getItem('kirjasto-user-token'))
   const books = useQuery(ALL_BOOKS)
+  const client = useApolloClient()
 
   if (books.loading) return <div>loading...</div>
+
+  const logOut = () => {
+    localStorage.clear()
+    setToken(null)
+    client.resetStore()
+    setPage("books")
+  }
 
   const genreOptions = new Set(books.data.allBooks.flatMap(b => b.genres))
 
@@ -31,7 +39,7 @@ const App = () => {
         </a>
       </div>
       <div>
-        <Menu token={token} setToken={setToken} setPage={setPage} />
+        <Menu token={token} logOut={logOut} setPage={setPage} />
 
         <Authors show={page === "authors"} token={token} />
 
@@ -41,7 +49,7 @@ const App = () => {
 
         <Login show={page === "login"} setPage={setPage} setToken={setToken} />
 
-        <Recommend show={page === "recommend"} />
+        <Recommend show={page === "recommend"} books={books.data.allBooks} />
       </div>
     </>
   )

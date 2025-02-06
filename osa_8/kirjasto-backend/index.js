@@ -137,7 +137,6 @@ const resolvers = {
     },
     allAuthors: async () => Author.find({}),
     me: async (root, args, { currentUser }) => {
-      console.log(currentUser)
       return currentUser
     }
   },
@@ -224,9 +223,6 @@ const resolvers = {
         })
       }
 
-      currentUser = user
-      console.log(currentUser)
-
       const userForToken = {
         username: user.username,
         id: user._id,
@@ -252,11 +248,10 @@ startStandaloneServer(server, {
         trimmedToken, process.env.JWT_SECRET
       )
       const currentUser = await User.findById(decodedToken.id)
-      console.log(currentUser)
       return { currentUser }
     }
     return { currentUser: null }
   }
 }).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
+  console.log(`server ready at ${url}`)
 })

@@ -3,13 +3,13 @@ import BookTable from './BookTable'
 import { CURRENT_USER } from '../queries'
 
 const Recommend = ({ show, books }) => {
-  const user = useQuery(CURRENT_USER)
+  const user = useQuery(CURRENT_USER, {
+    skip: !show
+  })
 
   if (!show) return null
 
   if (user.loading) return <div>loading...</div>
-
-  console.log(user.data.me)
 
   return (
     <div>
